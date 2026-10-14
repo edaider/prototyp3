@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { Sparkles, CheckCircle2, RotateCcw } from "lucide-react";
+import { AITutorShell, Message } from "../ai/AITutor"; 
 
 export interface TextOrderPart {
   id: string;
@@ -23,341 +25,385 @@ interface TextOrderExerciseProps {
   exercises: TextOrderExerciseItem[];
 }
 
-export default function TextOrderExercise({
-  exercises,
-}: TextOrderExerciseProps) {
+// Steg för att leda eleven genom textens delar
+const STEP_ROLES = [
+  {
+    title: "Inledning",
+    instruction: "Hjälp mig att hitta INLEDNINGEN! Vilket stycke presenterar situationen, miljön eller ämnet först?",
+  },
+  {
+    title: "Huvuddel – del 1",
+    instruction: "Bra! Vilket stycke ska komma sedan för att utveckla handlingen eller argumenten?",
+  },
+  {
+    title: "Huvuddel – del 2",
+    instruction: "Snyggt! Vilket stycke bygger vidare på förloppet eller resonemanget härnäst?",
+  },
+  {
+    title: "Avslutning",
+    instruction: "Sista pusselbiten! Vilket stycke knyter ihop säcken och utgör AVSLUTNINGEN?",
+  },
+];
+
+export default function TextOrderExercise({ exercises }: TextOrderExerciseProps) {
   const [exerciseIndex, setExerciseIndex] = useState(0);
-  const [orders, setOrders] = useState<Record<string, string[]>>({});
-  const [orderChecked, setOrderChecked] = useState<Record<string, boolean>>({});
-  const [selectedTypes, setSelectedTypes] = useState<Record<string, string>>({});
-  const [typeChecked, setTypeChecked] = useState<Record<string, boolean>>({});
-  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [selectedPartIds, setSelectedPartIds] = useState<string[]>([]);
+  const [selectedType, setSelectedType] = useState<string>("");
+  const [isTypeCorrect, setIsTypeCorrect] = useState<boolean | null>(null);
+  const [isCompleted, setIsCompleted] = useState(false);
 
-  if (!exercises.length) return null;
+  // AI-tutor chattmeddelanden
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: "1",
+      sender: "edda",
+      title: "Edda hälsar",
+      text: STEP_ROLES[0].instruction,
+    },
+  ]);
 
-  const exercise = exercises[exerciseIndex];
-  const id = exercise.id;
+  if (!exercises || exercises.length === 0) return null;
 
-  const currentOrder = orders[id] ?? exercise.parts.map((part) => part.id);
-  const parts = currentOrder
-    .map((partId) => exercise.parts.find((part) => part.id === partId))
-    .filter((part): part is TextOrderPart => !!part);
+  const currentExercise = exercises[exerciseIndex];
+  const totalSteps = currentExercise.correctOrder.length;
 
-  const isOrderCorrect =
-    orderChecked[id] === true &&
-    currentOrder.every((partId, index) => partId === exercise.correctOrder[index]);
+  // Hämta vilka delar som redan placerats
+  const selectedParts = selectedPartIds
+    .map((id) => currentExercise.parts.find((p) => p.id === id))
+    .filter((p): p is TextOrderPart => !!p);
 
-  const isTypeCorrect =
-    typeChecked[id] === true &&
-    selectedTypes[id] === exercise.correctType;
+  // Hantera klick på ett textstycke
+  const handlePartClick = (part: TextOrderPart) => {
+    if (isCompleted || selectedPartIds.includes(part.id)) return;
 
-  const completedCount = exercises.filter((item) => {
-    const itemOrder = orders[item.id] ?? item.parts.map((part) => part.id);
-    return (
-      orderChecked[item.id] === true &&
-      itemOrder.every((partId, index) => partId === item.correctOrder[index]) &&
-      typeChecked[item.id] === true &&
-      selectedTypes[item.id] === item.correctType
-    );
-  }).length;
+    const targetCorrectId = currentExercise.correctOrder[currentStepIndex];
 
-  const movePart = (from: number, to: number) => {
-    if (isOrderCorrect || to < 0 || to >= parts.length) return;
+    if (part.id === targetCorrectId) {
+      // RÄTT VAL
+      const newSelected = [...selectedPartIds, part.id];
+      setSelectedPartIds(newSelected);
 
-    const next = [...currentOrder];
-    const [moved] = next.splice(from, 1);
-    next.splice(to, 0, moved);
+      if (currentStepIndex + 1 < totalSteps) {
+        const nextStep = currentStepIndex + 1;
+        setCurrentStepIndex(nextStep);
+        const nextPrompt = STEP_ROLES[nextStep]?.instruction || "Vilket stycke kommer härnäst?";
 
-    setOrders((prev) => ({ ...prev, [id]: next }));
-    setOrderChecked((prev) => ({ ...prev, [id]: false }));
-    setTypeChecked((prev) => ({ ...prev, [id]: false }));
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now().toString(),
+            sender: "user",
+            text: `Jag väljer: "${part.text.substring(0, 35)}..."`,
+          },
+          {
+            id: (Date.now() + 1).toString(),
+            sender: "edda",
+            title: "Klockrent!",
+            text: `Rätt tänkt! Det stycket passar perfekt här. Now: ${nextPrompt}`,
+          },
+        ]);
+      } else {
+        // Alla delar sorterade -> Gå till texttyp
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now().toString(),
+            sender: "user",
+            text: `Jag väljer: "${part.text.substring(0, 35)}..."`,
+          },
+          {
+            id: (Date.now() + 1).toString(),
+            sender: "edda",
+            title: "Texten är komplett!",
+            text: `Härligt! ${currentExercise.structureExplanation} Välj nu vilken texttyp detta är nedan.`,
+          },
+        ]);
+      }
+    } else {
+      // FEL VAL
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          sender: "user",
+          text: `Jag väljer: "${part.text.substring(0, 35)}..."`,
+        },
+        {
+          id: (Date.now() + 1).toString(),
+          sender: "edda",
+          title: "Inte riktigt!",
+          text: `Nja, det där stycket hör hemma på en annan plats i strukturen. Tänk på: ${STEP_ROLES[currentStepIndex]?.instruction || "vad som bör komma härnäst."}`,
+        },
+      ]);
+    }
   };
 
-  const dropOn = (targetId: string) => {
-    if (!draggedId || draggedId === targetId || isOrderCorrect) return;
-
-    const from = currentOrder.indexOf(draggedId);
-    const to = currentOrder.indexOf(targetId);
-
-    if (from !== -1 && to !== -1) movePart(from, to);
-    setDraggedId(null);
+  // Hantera val av texttyp
+  const handleTypeSelect = (option: string) => {
+    setSelectedType(option);
+    if (option === currentExercise.correctType) {
+      setIsTypeCorrect(true);
+      setIsCompleted(true);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          sender: "user",
+          text: `Jag tror det är: ${option}`,
+        },
+        {
+          id: (Date.now() + 1).toString(),
+          sender: "edda",
+          title: "Fantastiskt!",
+          text: `Helt rätt! ${currentExercise.typeExplanation}`,
+        },
+      ]);
+    } else {
+      setIsTypeCorrect(false);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          sender: "user",
+          text: `Jag tror det är: ${option}`,
+        },
+        {
+          id: (Date.now() + 1).toString(),
+          sender: "edda",
+          title: "Gissa igen",
+          text: `Inte riktigt ${option}. Fundera på textens syfte och prova ett annat alternativ!`,
+        },
+      ]);
+    }
   };
 
-  const checkOrder = () => {
-    setOrderChecked((prev) => ({ ...prev, [id]: true }));
-    setTypeChecked((prev) => ({ ...prev, [id]: false }));
+  // Hantera meddelande skickat via Edda chatt-rutan
+  const handleSendMessage = (userText: string) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now().toString(),
+        sender: "user",
+        text: userText,
+      },
+      {
+        id: (Date.now() + 1).toString(),
+        sender: "edda",
+        text: `Kika på korten nedan! ${STEP_ROLES[currentStepIndex]?.instruction || "Klicka på det stycke du tror passar bäst."}`,
+      },
+    ]);
   };
 
-  const resetExercise = () => {
-    setOrders((prev) => {
-      const next = { ...prev };
-      delete next[id];
-      return next;
-    });
-    setOrderChecked((prev) => ({ ...prev, [id]: false }));
-    setSelectedTypes((prev) => ({ ...prev, [id]: "" }));
-    setTypeChecked((prev) => ({ ...prev, [id]: false }));
+  // Återställ nuvarande övning
+  const handleReset = () => {
+    setCurrentStepIndex(0);
+    setSelectedPartIds([]);
+    setSelectedType("");
+    setIsTypeCorrect(null);
+    setIsCompleted(false);
+    setMessages([
+      {
+        id: Date.now().toString(),
+        sender: "edda",
+        title: "Börja om",
+        text: STEP_ROLES[0].instruction,
+      },
+    ]);
   };
 
-  const resetAll = () => {
-    setExerciseIndex(0);
-    setOrders({});
-    setOrderChecked({});
-    setSelectedTypes({});
-    setTypeChecked({});
-    setDraggedId(null);
+  // Byt övning
+  const handleNextExercise = () => {
+    const nextIndex = (exerciseIndex + 1) % exercises.length;
+    setExerciseIndex(nextIndex);
+    setCurrentStepIndex(0);
+    setSelectedPartIds([]);
+    setSelectedType("");
+    setIsTypeCorrect(null);
+    setIsCompleted(false);
+    setMessages([
+      {
+        id: Date.now().toString(),
+        sender: "edda",
+        title: `Övning: ${exercises[nextIndex].title}`,
+        text: STEP_ROLES[0].instruction,
+      },
+    ]);
   };
 
   return (
-    <section className="w-full max-w-4xl mx-auto px-4 py-8">
-      <header className="mb-6">
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
-          Pussla ihop texten
-        </h2>
-        <p className="text-sm text-slate-600 leading-relaxed">
-          Ordna textdelarna. Identifiera sedan texttypen och undersök
-          hur textens struktur hjälper läsaren att förstå innehållet.
-        </p>
-
-        <div className="mt-5 flex justify-between text-sm font-semibold text-slate-600">
-          <span>Övning {exerciseIndex + 1} av {exercises.length}</span>
-          <span>{completedCount} av {exercises.length} klara</span>
+    <section className="w-full max-w-5xl mx-auto p-4 sm:p-6 space-y-6">
+      {/* HEADER & EDDA-TUTOR INTEGRATION HÖGST UPP */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-3xl border-2 border-amber-900/20 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-100/60 p-5 shadow-sm">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-900">
+            <Sparkles className="h-4 w-4 text-amber-600 animate-pulse" />
+            <span>Övning {exerciseIndex + 1} av {exercises.length}: {currentExercise.title}</span>
+          </div>
+          <p className="text-sm sm:text-base font-semibold text-stone-800 leading-relaxed">
+            "{messages[messages.length - 1]?.text || STEP_ROLES[currentStepIndex]?.instruction}"
+          </p>
         </div>
 
-        <div className="h-2 bg-slate-100 rounded-full overflow-hidden mt-2">
-          <div
-            className="h-full bg-indigo-500 transition-all"
-            style={{
-              width: `${(completedCount / exercises.length) * 100}%`,
-            }}
+        {/* AI Tutor Komponent i hörnet */}
+        <div className="flex-shrink-0 self-end sm:self-center">
+          <AITutorShell
+            messages={messages}
+            onSendMessage={handleSendMessage}
+            subtitle="Din textguide"
           />
         </div>
+      </div>
 
-        <div className="flex flex-wrap gap-2 mt-4">
-          {exercises.map((item, index) => (
+      {/* FLIKAR FÖR FLERA ÖVNINGAR */}
+      {exercises.length > 1 && (
+        <div className="flex flex-wrap gap-2">
+          {exercises.map((item, idx) => (
             <button
               key={item.id}
               type="button"
               onClick={() => {
-                setExerciseIndex(index);
-                setDraggedId(null);
+                setExerciseIndex(idx);
+                setCurrentStepIndex(0);
+                setSelectedPartIds([]);
+                setSelectedType("");
+                setIsTypeCorrect(null);
+                setIsCompleted(false);
+                setMessages([
+                  {
+                    id: Date.now().toString(),
+                    sender: "edda",
+                    title: item.title,
+                    text: STEP_ROLES[0].instruction,
+                  },
+                ]);
               }}
-              className={`rounded-full border px-3 py-2 text-sm font-semibold ${
-                index === exerciseIndex
-                  ? "bg-indigo-600 text-white border-indigo-600"
-                  : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+              className={`rounded-full px-4 py-2 text-xs font-bold transition-colors ${
+                idx === exerciseIndex
+                  ? "bg-amber-800 text-amber-50"
+                  : "bg-stone-100 text-stone-700 hover:bg-stone-200"
               }`}
             >
-              {index + 1}. {item.title}
+              {idx + 1}. {item.title}
             </button>
           ))}
         </div>
-      </header>
+      )}
 
-      <div className="rounded-3xl border border-slate-200 bg-white shadow-sm p-4 sm:p-6">
-        <h3 className="text-xl font-extrabold text-slate-900 mb-2">
-          {exercise.title}
-        </h3>
-        <p className="text-sm text-slate-600 mb-6">
-          {exercise.instruction}
-        </p>
-
-        <h4 className="font-bold text-slate-900 mb-3">
-          Steg 1: Ordna textdelarna
-        </h4>
-
-        <div className="space-y-3">
-          {parts.map((part, index) => (
-            <div
-              key={part.id}
-              draggable={!isOrderCorrect}
-              onDragStart={(event) => {
-                setDraggedId(part.id);
-                event.dataTransfer.setData("text/plain", part.id);
-                event.dataTransfer.effectAllowed = "move";
-              }}
-              onDragOver={(event) => event.preventDefault()}
-              onDrop={(event) => {
-                event.preventDefault();
-                const droppedId = event.dataTransfer.getData("text/plain");
-                if (droppedId) {
-                  setDraggedId(droppedId);
-                  dropOn(part.id);
-                }
-              }}
-              onDragEnd={() => setDraggedId(null)}
-              className={`rounded-2xl border p-4 ${
-                draggedId === part.id
-                  ? "border-indigo-400 bg-indigo-50 opacity-60"
-                  : "border-slate-200 bg-white"
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                <span className="flex items-center justify-center shrink-0 w-8 h-8 rounded-lg bg-slate-100 font-bold text-slate-700">
+      {/* BYGGD TEXT (VISAS EFTER HAND SOM ELEVEN KLICKAR RÄTT) */}
+      {selectedParts.length > 0 && (
+        <div className="space-y-3 rounded-2xl border border-emerald-200 bg-emerald-50/50 p-4">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-2">
+            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+            <span>Byggd text i rätt ordning ({selectedParts.length} av {totalSteps}):</span>
+          </h4>
+          <div className="space-y-2">
+            {selectedParts.map((part, index) => (
+              <div
+                key={part.id}
+                className="rounded-xl border border-emerald-200 bg-white p-3.5 text-sm text-stone-800 shadow-xs flex gap-3 items-start animate-fade-in"
+              >
+                <span className="flex-shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-800">
                   {index + 1}
                 </span>
-
-                <p className="flex-1 text-sm sm:text-base text-slate-700 leading-relaxed">
-                  {part.text}
-                </p>
-
-                <div className="flex flex-col gap-1">
-                  <button
-                    type="button"
-                    disabled={index === 0 || isOrderCorrect}
-                    aria-label="Flytta upp"
-                    onClick={() => movePart(index, index - 1)}
-                    className="w-8 h-8 rounded-lg border border-slate-200 disabled:opacity-30"
-                  >
-                    ↑
-                  </button>
-                  <button
-                    type="button"
-                    disabled={index === parts.length - 1 || isOrderCorrect}
-                    aria-label="Flytta ned"
-                    onClick={() => movePart(index, index + 1)}
-                    className="w-8 h-8 rounded-lg border border-slate-200 disabled:opacity-30"
-                  >
-                    ↓
-                  </button>
-                </div>
+                <p className="leading-relaxed">{part.text}</p>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+      )}
 
-        {!isOrderCorrect && (
-          <button
-            type="button"
-            onClick={checkOrder}
-            className="w-full mt-5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-3"
-          >
-            Kontrollera ordningen
-          </button>
-        )}
+      {/* STEG 1: OSORTERADE KORT ATT KLICKA PÅ */}
+      {selectedParts.length < totalSteps && (
+        <div className="space-y-3">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500">
+            Klicka på det stycke som passar in på Eddas instruktion:
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {currentExercise.parts.map((part) => {
+              const isUsed = selectedPartIds.includes(part.id);
+              if (isUsed) return null;
 
-        {orderChecked[id] && !isOrderCorrect && (
-          <div role="status" className="mt-4 rounded-xl bg-amber-50 border border-amber-200 p-4">
-            <p className="font-bold text-amber-900 mb-1">
-              Inte riktigt än!
-            </p>
-            <p className="text-sm text-amber-900">
-              Fundera på hur texten börjar, hur innehållet utvecklas
-              och vad som behöver komma sist. Flytta delarna och försök igen.
-            </p>
-          </div>
-        )}
-
-        {isOrderCorrect && (
-          <div role="status" className="mt-4 rounded-xl bg-emerald-50 border border-emerald-200 p-4">
-            <p className="font-bold text-emerald-900 mb-2">
-              Rätt ordning!
-            </p>
-            <p className="text-sm text-emerald-900 leading-relaxed">
-              {exercise.structureExplanation}
-            </p>
-          </div>
-        )}
-
-        {isOrderCorrect && (
-          <div className="mt-8 pt-6 border-t border-slate-200">
-            <h4 className="font-bold text-slate-900 mb-2">
-              Steg 2: Vilken texttyp är det?
-            </h4>
-            <p className="text-sm text-slate-600 mb-4">
-              Välj det alternativ som bäst beskriver textens syfte och typiska drag.
-            </p>
-
-            <div className="space-y-2">
-              {exercise.typeOptions.map((option) => (
+              return (
                 <button
-                  key={option}
+                  key={part.id}
                   type="button"
-                  disabled={isTypeCorrect}
-                  onClick={() => {
-                    setSelectedTypes((prev) => ({ ...prev, [id]: option }));
-                    setTypeChecked((prev) => ({ ...prev, [id]: false }));
-                  }}
-                  className={`w-full rounded-xl border p-4 text-left text-sm font-semibold ${
-                    selectedTypes[id] === option
-                      ? "border-violet-500 bg-violet-50 text-violet-900"
-                      : "border-slate-200 hover:bg-slate-50 text-slate-700"
-                  }`}
+                  onClick={() => handlePartClick(part)}
+                  className="w-full text-left rounded-2xl border-2 border-stone-200 bg-white p-5 text-sm sm:text-base text-stone-800 transition-all hover:border-amber-500 hover:bg-amber-50/30 hover:shadow-md active:scale-[0.99] flex flex-col justify-between"
                 >
-                  {selectedTypes[id] === option ? "◉ " : "○ "}
-                  {option}
+                  <p className="leading-relaxed">{part.text}</p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-amber-800">
+                    <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+                    Välj detta stycke
+                  </span>
                 </button>
-              ))}
-            </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
-            {!isTypeCorrect && (
+      {/* STEG 2: VÄLJ TEXTTYP EFTER ATT ORDNINGEN ÄR KLAR */}
+      {selectedParts.length === totalSteps && (
+        <div className="rounded-2xl border-2 border-amber-200 bg-white p-5 space-y-4">
+          <h4 className="text-base font-bold text-stone-900">
+            Steg 2: Vilken texttyp har vi pusslat ihop?
+          </h4>
+          <p className="text-sm text-stone-600">
+            Läs hela texten ovan och välj den texttyp som stämmer bäst:
+          </p>
+
+          <div className="space-y-2">
+            {currentExercise.typeOptions.map((option) => (
               <button
+                key={option}
                 type="button"
-                disabled={!selectedTypes[id]}
-                onClick={() =>
-                  setTypeChecked((prev) => ({ ...prev, [id]: true }))
-                }
-                className="w-full mt-4 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold px-5 py-3 disabled:opacity-40"
-              >
-                Kontrollera texttypen
-              </button>
-            )}
-
-            {typeChecked[id] && (
-              <div
-                role="status"
-                className={`mt-4 rounded-xl border p-4 ${
-                  isTypeCorrect
-                    ? "bg-emerald-50 border-emerald-200"
-                    : "bg-amber-50 border-amber-200"
+                disabled={isCompleted}
+                onClick={() => handleTypeSelect(option)}
+                className={`w-full rounded-xl border p-4 text-left text-sm font-semibold transition-colors ${
+                  selectedType === option
+                    ? isTypeCorrect
+                      ? "border-emerald-500 bg-emerald-50 text-emerald-900"
+                      : "border-amber-500 bg-amber-50 text-amber-900"
+                    : "border-stone-200 hover:bg-stone-50 text-stone-800"
                 }`}
               >
-                <p className="font-bold mb-2">
-                  {isTypeCorrect
-                    ? `Rätt svar: ${exercise.correctType}!`
-                    : "Försök igen!"}
-                </p>
-                <p className="text-sm leading-relaxed">
-                  {isTypeCorrect
-                    ? exercise.typeExplanation
-                    : "Fundera på textens syfte och hur innehållet är uppbyggt. Välj ett annat alternativ."}
-                </p>
-              </div>
-            )}
+                {selectedType === option ? "◉ " : "○ "}
+                {option}
+              </button>
+            ))}
           </div>
-        )}
+        </div>
+      )}
 
-        <div className="mt-7 pt-5 border-t border-slate-100 flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={resetExercise}
-            className="rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold hover:bg-slate-50"
-          >
-            Börja om
-          </button>
-
-          {exerciseIndex < exercises.length - 1 && (
+      {/* AVSLUTNINGSKORT & ÅTERSTÄLLNING */}
+      {isCompleted && (
+        <div className="flex flex-col items-center justify-center p-6 bg-emerald-50 rounded-2xl border border-emerald-200 text-center gap-3">
+          <h3 className="text-xl font-bold text-emerald-900">Bra jobbat!</h3>
+          <p className="text-sm text-emerald-800 max-w-md">
+            Du och Edda har framgångsrikt ordnat texten och identifierat rätt texttyp!
+          </p>
+          <div className="flex flex-wrap gap-3 mt-2">
             <button
               type="button"
-              onClick={() => {
-                setExerciseIndex((prev) => prev + 1);
-                setDraggedId(null);
-              }}
-              className="flex-1 rounded-xl bg-slate-900 text-white font-bold px-4 py-3 hover:bg-slate-800"
+              onClick={handleReset}
+              className="inline-flex items-center gap-2 rounded-xl border border-stone-300 bg-white px-4 py-2.5 text-sm font-bold text-stone-800 hover:bg-stone-50 transition-colors"
             >
-              Nästa text →
+              <RotateCcw className="h-4 w-4" />
+              <span>Gör om denna</span>
             </button>
-          )}
-
-          <button
-            type="button"
-            onClick={resetAll}
-            className="rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold hover:bg-slate-50"
-          >
-            Börja om alla
-          </button>
+            {exercises.length > 1 && (
+              <button
+                type="button"
+                onClick={handleNextExercise}
+                className="inline-flex items-center gap-2 rounded-xl bg-amber-800 px-5 py-2.5 text-sm font-bold text-amber-50 hover:bg-amber-900 transition-colors"
+              >
+                <span>Nästa text →</span>
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
