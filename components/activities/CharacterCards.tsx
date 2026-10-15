@@ -114,11 +114,6 @@ export default function CharacterCards({ figures = DEFAULT_FIGURES }: CharacterC
         Fyra sätt att läsa
       </h1>
 
-      <p className="text-sm text-slate-600 text-center max-w-2xl mx-auto mb-8 px-4">
-        På nationella provet behöver du kunna läsa på olika sätt.
-        Lär dig känna igen vad frågan kräver och välj strategi därefter.
-      </p>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4">
         {figures.map((fig) => (
           <div

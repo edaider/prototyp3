@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export interface TextTypesDiagnosisItem {
   id: string;
@@ -54,7 +57,7 @@ För det andra kan längre raster ge eleverna fler möjligheter att umgås och b
 
 Vissa menar att längre raster tar tid från undervisningen. Men med en genomtänkt skoldag behöver återhämtning inte innebära att lärandet blir lidande.
 
-Därför bör skolor se över sina scheman och ge eleverna mer tid för återhämtning.`,
+Därför bör skolar se över sina scheman och ge eleverna mer tid för återhämtning.`,
     options: [
       "Skönlitteratur",
       "Sakprosa",
@@ -100,23 +103,6 @@ export default function TextTypesDiagnosis({
 
   const currentItem = items[currentIndex];
 
-  if (!currentItem) {
-    return (
-      <div className="mx-auto max-w-3xl p-6 text-center">
-        <h2 className="text-2xl font-bold text-slate-800">
-          Diagnosen är klar!
-        </h2>
-        <p className="mt-2 text-slate-600">
-          Det finns inga uppgifter att visa.
-        </p>
-      </div>
-    );
-  }
-
-  const isSubmitted = !!submitted[currentItem.id];
-  const selectedAnswer = answers[currentItem.id];
-  const isCorrect = selectedAnswer === currentItem.correctAnswer;
-
   const correctCount = items.filter(
     (item) =>
       submitted[item.id] &&
@@ -127,8 +113,73 @@ export default function TextTypesDiagnosis({
     (item) => submitted[item.id]
   ).length;
 
-  const isLast = currentIndex === items.length - 1;
   const allCompleted = completedCount === items.length;
+
+  // Slutskärm när alla frågor i diagnosen är genomförda
+  if (allCompleted || !currentItem) {
+    return (
+      <div className="mx-auto max-w-2xl py-8 text-center space-y-6 bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-100">
+        
+        {/* Märke för erövrad förmåga: genrekunskap.jpeg */}
+        <div className="flex justify-center">
+          <div className="relative w-36 h-36 sm:w-44 sm:h-44">
+            <Image
+              src="/images/genrekunskap.jpeg"
+              alt="Erövrad förmåga: Genrekunskap"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+        </div>
+
+        {/* Textbeskrivning */}
+        <div className="space-y-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug">
+            Du har erövrat förmågan <span className="text-amber-800">Genrekunskap!</span>
+          </h2>
+          <p className="text-sm sm:text-base text-slate-600 max-w-md mx-auto">
+            Nu kan du och draken flyga vidare.
+          </p>
+          <p className="text-xs text-slate-400 pt-1">
+            Du fick <span className="font-bold text-slate-700">{correctCount}</span> av{" "}
+            <span className="font-bold text-slate-700">{items.length}</span> rätt.
+          </p>
+        </div>
+
+        {/* Knapp för att flyga vidare till startsidan */}
+        <div>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-xl bg-amber-800 px-8 py-3 text-sm font-bold text-amber-50 shadow-md transition hover:bg-amber-900 cursor-pointer"
+          >
+            <span>Flyg vidare</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        {/* Drake-video utan ram placerad under knappen */}
+        <div className="mx-auto w-full max-w-xs pt-4">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-auto object-cover bg-transparent"
+          >
+            <source src="/videos/drake.mp4" type="video/mp4" />
+            Din webbläsare stöder inte videouppspelning.
+          </video>
+        </div>
+
+      </div>
+    );
+  }
+
+  const isSubmitted = !!submitted[currentItem.id];
+  const selectedAnswer = answers[currentItem.id];
+  const isCorrect = selectedAnswer === currentItem.correctAnswer;
+  const isLast = currentIndex === items.length - 1;
 
   const handleAnswer = (optionIndex: number) => {
     if (isSubmitted) return;
@@ -146,12 +197,6 @@ export default function TextTypesDiagnosis({
       ...previous,
       [currentItem.id]: true,
     }));
-  };
-
-  const handleRestart = () => {
-    setAnswers({});
-    setSubmitted({});
-    setCurrentIndex(0);
   };
 
   return (
@@ -313,7 +358,7 @@ export default function TextTypesDiagnosis({
               >
                 Kontrollera svar
               </button>
-            ) : !isLast ? (
+            ) : (
               <button
                 type="button"
                 onClick={() =>
@@ -321,38 +366,12 @@ export default function TextTypesDiagnosis({
                 }
                 className="rounded-xl bg-indigo-600 px-6 py-3 font-bold text-white transition-colors hover:bg-indigo-700"
               >
-                Nästa uppgift →
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={handleRestart}
-                className="rounded-xl bg-indigo-600 px-6 py-3 font-bold text-white transition-colors hover:bg-indigo-700"
-              >
-                Gör om diagnosen
+                {isLast ? "Se resultat" : "Nästa uppgift →"}
               </button>
             )}
           </div>
         </div>
       </div>
-
-      {allCompleted && (
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 text-center">
-          <p className="text-sm font-bold uppercase tracking-widest text-slate-500">
-            Diagnosen slutförd
-          </p>
-
-          <p className="mt-2 text-3xl font-black text-slate-900">
-            {correctCount} av {items.length} rätt
-          </p>
-
-          <p className="mt-2 text-slate-600">
-            {correctCount === items.length
-              ? "Utmärkt! Du kan skilja mellan de tre textkategorierna."
-              : "Bra jobbat med att genomföra diagnosen! Läs förklaringarna och försök igen om du vill träna mer."}
-          </p>
-        </div>
-      )}
     </div>
   );
 }

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { CheckCircle2, XCircle, ArrowRight, RotateCcw } from "lucide-react";
+import Link from "next/link";
+import { CheckCircle2, XCircle, ArrowRight } from "lucide-react";
 
 type StepData = {
   id: number;
@@ -98,36 +99,64 @@ export function Quiz() {
     }
   }
 
-  function handleRestart() {
-    setCurrentIndex(0);
-    setSelectedOption(null);
-    setIsAnswered(false);
-    setScore(0);
-    setIsComplete(false);
-  }
-
+  // Slutvy / Resultatskärm när alla steg genomförts
   if (isComplete) {
     return (
-      <div className="mx-auto max-w-2xl py-12 text-center space-y-6 bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-        <div className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-amber-100 text-amber-800 shadow-inner">
-          <CheckCircle2 className="h-10 w-10 text-amber-700" />
+      <div className="mx-auto max-w-2xl py-8 text-center space-y-6 bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-100">
+        
+        {/* Stämpeln motentext.png */}
+        <div className="flex justify-center">
+          <div className="relative w-36 h-36 sm:w-44 sm:h-44">
+            <Image
+              src="/images/mötentext.jpeg"
+              alt="Erövrad förmåga: Möt en text"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold text-slate-900">Bra jobbat med Eddas lästekniker!</h2>
-          <p className="mt-2 text-base text-slate-600">
-            Du fick <span className="font-bold text-amber-800">{score}</span> av{" "}
-            <span className="font-bold">{STEPS.length}</span> rätt.
+
+        {/* Textbeskrivning */}
+        <div className="space-y-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug">
+            Du har erövrat förmågan <span className="text-amber-800">Möt en text!</span>
+          </h2>
+          <p className="text-sm sm:text-base text-slate-600 max-w-md mx-auto">
+            Nu kan du och draken flyga vidare.
+          </p>
+          <p className="text-xs text-slate-400 pt-1">
+            Du fick <span className="font-bold text-slate-700">{score}</span> av{" "}
+            <span className="font-bold text-slate-700">{STEPS.length}</span> rätt.
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={handleRestart}
-          className="inline-flex items-center gap-2 rounded-xl border border-amber-900/30 bg-amber-800 px-6 py-2.5 text-sm font-bold text-amber-50 shadow-md transition hover:bg-amber-900 cursor-pointer"
-        >
-          <RotateCcw className="h-4 w-4" />
-          <span>Gör om övningen</span>
-        </button>
+
+        {/* Drake-video utan ram under knappen */}
+        <div className="mx-auto w-full max-w-xs pt-4">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-auto object-cover bg-transparent"
+          >
+            <source src="/videos/drake.mp4" type="video/mp4" />
+            Din webbläsare stöder inte videouppspelning.
+          </video>
+        </div>
+
+        {/* Knapp för att flyga vidare till startsidan */}
+        <div>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-xl bg-amber-800 px-8 py-3 text-sm font-bold text-amber-50 shadow-md transition hover:bg-amber-900 cursor-pointer"
+          >
+            <span>Flyg vidare</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
       </div>
     );
   }
@@ -150,11 +179,11 @@ export function Quiz() {
       {/* Main Grid: Vänster = Edda + Textvisning, Höger = Elevens Fråga */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        {/* VÄNSTER SPALT: Edda-bild & Textvisning */}
+        {/* VÄNSTER SPALT: Edda-bild (samt bild i steg 2) & Textvisning */}
         <div className="lg:col-span-7 flex gap-4 items-start bg-white p-2 rounded-2xl">
           
-          {/* Edda-bild */}
-          <div className="relative shrink-0 w-28 sm:w-36 pt-2">
+          {/* Edda-kolumn */}
+          <div className="flex flex-col items-center gap-3 shrink-0 w-28 sm:w-36 pt-2">
             <Image
               src="/images/hovnarren.png"
               alt="Hovnarren Edda"
@@ -163,6 +192,18 @@ export function Quiz() {
               className="object-contain"
               priority
             />
+
+            {/* Bild under Edda i Steg 2: Skapa inre bilder */}
+            {currentIndex === 1 && (
+              <div className="relative w-full h-28 rounded-xl overflow-hidden border border-amber-200 shadow-sm animate-fadeIn">
+                <Image
+                  src="/images/simtavling.jpg"
+                  alt="Inre bild av simtävlingen"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
           </div>
 
           {/* Text-kort med Gul Markering */}
@@ -270,8 +311,7 @@ export function Quiz() {
                     onClick={handleNext}
                     className="inline-flex items-center gap-1.5 rounded-xl bg-amber-800 px-4 py-2 text-xs font-bold text-amber-50 hover:bg-amber-900 transition cursor-pointer"
                   >
-                    <span>{currentIndex < STEPS.length - 1 ? "Gå vidare" : "Avsluta"}</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
+                    <span>{currentIndex < STEPS.length - 1 ? "Nästa steg" : "Se resultat"}</span>
                   </button>
                 </div>
               </div>

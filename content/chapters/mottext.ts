@@ -67,7 +67,7 @@ export const mottext: ChapterConfig = {
           type: "reading-strategies",
           title: "Testa om du kan läsa på eller mellan raderna",
           content: {
-            imageSrc: "images/mellanraderna.png",
+            imageSrc: "/images/mellanraderna.png",
             excerpt: "Linn hade tränat inför simtävlingen i fyra månader. Kvällen innan stod väskan packad vid dörren. På morgonen åt hon ingen frukost, fast mamma tjatade.",
             leftQuestion: {
               title: "Hur länge har Linn tränat?",

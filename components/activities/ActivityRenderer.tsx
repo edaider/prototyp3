@@ -13,7 +13,21 @@ import EddaVideoIntro from "./EddaVideoIntro";
 import TextTypesCards from "./TextTypesCards";
 import RecognizeCards from "./RecognizeCards";
 import TextOrderExercise from "./TextOrderExercise";
-import TextTypesDiagnosis from "./TextTypesDiagnosis";
+
+// Komponenter för Föra Resonemang
+import CharacterCards from "./CharacterCards";
+import UnderstandQuestion from "./UnderstandQuestion";
+import ReadingSkillsCards from "./ReadingSkillsCards";
+import WritingLogPractise from "./WritingLogPractise";
+
+// Komponenter för Sammanfattning
+import SummaryFlipCards from "./SummaryFlipCards";
+import TimedTextMemory from "./TimedTextMemory";
+import WritingLogPractiseSummary from "./WritingLogPractiseSummary";
+import DiagnosticSummary from "./DiagnosticSummary";
+
+// Importera din DiagnosticText-komponent
+import DiagnosticText from "./DiagnosticText";
 
 type Props = {
   activity: ActivityConfig;
@@ -28,7 +42,32 @@ export function ActivityRenderer({ activity, mode }: Props) {
   const renderActivityContent = () => {
     switch (activity.type) {
       case "edda-video-intro":
-        return <EddaVideoIntro {...activity.props} />;
+        return <EddaVideoIntro {...((activity.props as object) || {})} />;
+
+      case "summary-flip-cards":
+        return <SummaryFlipCards {...((activity.props as object) || {})} />;
+
+      case "timed-text-memory":
+        return <TimedTextMemory {...((activity.props as object) || {})} />;
+
+      case "summary-writing-practice":
+        return <WritingLogPractiseSummary {...((activity.props as object) || {})} />;
+
+      case "summary-diagnosis":
+        return <DiagnosticSummary {...((activity.props as object) || {})} />;
+
+      case "character-cards":
+        return <CharacterCards activity={activity} {...(activity.props || {})} />;
+
+      case "svarsteknik":
+      case "understand-question":
+        return <UnderstandQuestion activity={activity} {...(activity.props || {})} />;
+
+      case "reading-skill-cards":
+        return <ReadingSkillsCards activity={activity} {...(activity.props || {})} />;
+
+      case "writing-log-practice":
+        return <WritingLogPractise activity={activity} mode={mode} {...(activity.props || {})} />;
 
       case "flashcards":
         return <Flashcards activity={activity} />;
@@ -49,10 +88,10 @@ export function ActivityRenderer({ activity, mode }: Props) {
         return <Quiz activity={activity} />;
 
       case "text-types-cards":
-        return <TextTypesCards {...activity.props} />;
+        return <TextTypesCards {...(activity.props || {})} />;
 
       case "recognize-cards":
-        return <RecognizeCards {...activity.props} />;
+        return <RecognizeCards {...(activity.props || {})} />;
 
       case "text-order-exercise": {
         const exercises = activity.props?.exercises;
@@ -78,7 +117,7 @@ export function ActivityRenderer({ activity, mode }: Props) {
       }
 
       case "diagnostic-text":
-        return <TextTypesDiagnosis {...activity.props} />;
+        return <DiagnosticText data={activity.content as any} {...(activity.props || {})} />;
 
       default:
         console.warn(
@@ -91,13 +130,13 @@ export function ActivityRenderer({ activity, mode }: Props) {
 
   return (
     <div className="relative w-full rounded-2xl border border-slate-200/80 bg-white/98 p-6 text-slate-900 shadow-2xl backdrop-blur-md md:p-10">
-      {activity.title && activity.type !== "edda-video-intro" && (
+      {activity.title && activity.type !== "edda-video-intro" && activity.type !== "diagnostic-text" && activity.type !== "summary-diagnosis" && (
         <h2 className="mb-3 text-2xl font-bold">
           {activity.title}
         </h2>
       )}
 
-      {activity.instructions && (
+      {activity.instructions && activity.type !== "diagnostic-text" && activity.type !== "summary-diagnosis" && (
         <p className="mb-6 leading-relaxed text-slate-600">
           {activity.instructions}
         </p>

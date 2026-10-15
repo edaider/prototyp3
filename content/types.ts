@@ -1,12 +1,15 @@
-// types.ts
-
 import type { TextOrderExerciseItem } from "@/components/activities/TextOrderExercise";
 import type { TextTypeCardItem } from "@/components/activities/TextTypesCards";
 import type { RecognizeCardItem } from "@/components/activities/RecognizeCards";
 import type { TextTypesDiagnosisItem } from "@/components/activities/TextTypesDiagnosis";
+import type { SummaryCardItem } from "@/components/activities/SummaryFlipCards";
+import type { TimedWord } from "@/components/activities/TimedTextMemory";
 
-// 1. ALLA dina befintliga aktivitetstyper finns kvar här!
+// 1. Lägg till dina nya aktivitetstyper här
 export type ActivityType =
+  | "edda-video-intro"
+  | "summary-flip-cards"
+  | "timed-text-memory"
   | "flashcards"
   | "writing-input"
   | "ai-tutor"
@@ -29,6 +32,39 @@ export type ActivityType =
   | "text-order-exercise";
 
 // 2. Specifika typer för aktiviteter med kända props
+export type EddaVideoActivity = {
+  id: string;
+  type: "edda-video-intro";
+  title?: string;
+  instructions?: string;
+  props?: {
+    title?: string;
+    videoSrc?: string;
+  };
+};
+
+export type SummaryFlipCardsActivity = {
+  id: string;
+  type: "summary-flip-cards";
+  title?: string;
+  instructions?: string;
+  props?: {
+    cards?: SummaryCardItem[];
+  };
+};
+
+export type TimedTextMemoryActivity = {
+  id: string;
+  type: "timed-text-memory";
+  title?: string;
+  instructions?: string;
+  props?: {
+    timerSeconds?: number;
+    words?: TimedWord[];
+    summaryPoints?: string[];
+  };
+};
+
 export type TextOrderActivity = {
   id: string;
   type: "text-order-exercise";
@@ -69,11 +105,14 @@ export type DiagnosticTextActivity = {
   };
 };
 
-// 3. Fallback för ALLA andra aktiviteter i hela projektet
+// 3. Fallback för ALLA andra aktiviteter
 export type GenericActivity = {
   id: string;
   type: Exclude<
     ActivityType,
+    | "edda-video-intro"
+    | "summary-flip-cards"
+    | "timed-text-memory"
     | "text-order-exercise"
     | "text-types-cards"
     | "recognize-cards"
@@ -88,13 +127,16 @@ export type GenericActivity = {
 
 // 4. Den kompletta unionen
 export type ActivityConfig =
+  | EddaVideoActivity
+  | SummaryFlipCardsActivity
+  | TimedTextMemoryActivity
   | TextOrderActivity
   | TextTypesCardsActivity
   | RecognizeCardsActivity
   | DiagnosticTextActivity
   | GenericActivity;
 
-// 5. Alla dina befintliga kapitel- och rumsstrukturer (oförändrade)
+// 5. Kapitelsystemet (Stödjer NU BÅDE "activities"-array och "rooms"-objekt)
 export type ChapterSection = {
   id: string;
   title: string;
@@ -139,6 +181,7 @@ export type ChapterConfig = {
   id: string;
   title: string;
   subtitle?: string;
+  description?: string;
 
   intro?: {
     video: string;
@@ -154,7 +197,9 @@ export type ChapterConfig = {
     }[];
   };
 
-  rooms: {
+  // Platt lista med aktiviteter ELLER rumsuppdelning
+  activities?: ActivityConfig[];
+  rooms?: {
     study: RoomConfig;
     practice: RoomConfig;
     diagnosis?: RoomConfig;

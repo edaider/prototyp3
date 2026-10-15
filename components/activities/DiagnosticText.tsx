@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export interface Question {
   id: number;
@@ -84,6 +87,63 @@ export default function DiagnosticText({ data = DEFAULT_DIAGNOSTIC_DATA }: Diagn
   const handleSubmit = () => {
     setSubmitted(true);
   };
+
+  // Slutskärm när diagnosen har lämnats in
+  if (submitted) {
+    return (
+      <div className="w-full max-w-2xl mx-auto py-8 text-center space-y-6 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 my-6">
+        
+        {/* Märke för erövrad förmåga: resonemang.jpeg */}
+        <div className="flex justify-center">
+          <div className="relative w-36 h-36 sm:w-44 sm:h-44">
+            <Image
+              src="/images/resonemang.jpeg"
+              alt="Erövrad förmåga: Föra resonemang"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+        </div>
+
+        {/* Textbeskrivning */}
+        <div className="space-y-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug">
+            Du har erövrat förmågan <span className="text-amber-800">Föra resonemang!</span>
+          </h2>
+          <p className="text-sm sm:text-base text-slate-600 max-w-md mx-auto">
+            Nu kan du och draken flyga vidare.
+          </p>
+        </div>
+
+        {/* Knapp för att flyga vidare till startsidan */}
+        <div>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-xl bg-amber-800 px-8 py-3 text-sm font-bold text-amber-50 shadow-md transition hover:bg-amber-900 cursor-pointer"
+          >
+            <span>Flyg vidare</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        {/* Drake-video utan ram placerad under knappen */}
+        <div className="mx-auto w-full max-w-xs pt-4">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-auto object-cover bg-transparent"
+          >
+            <source src="/videos/drake.mp4" type="video/mp4" />
+            Din webbläsare stöder inte videouppspelning.
+          </video>
+        </div>
+
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-5xl mx-auto py-6 px-4 font-sans text-slate-800">
@@ -204,12 +264,6 @@ export default function DiagnosticText({ data = DEFAULT_DIAGNOSTIC_DATA }: Diagn
               >
                 Lämna in diagnos
               </button>
-
-              {submitted && (
-                <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-semibold text-center animate-fadeIn">
-                  🎉 Bra jobbat! Dina svar har skickats in.
-                </div>
-              )}
             </aside>
           </div>
         </div>
