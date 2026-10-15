@@ -2,46 +2,48 @@
 
 import React, { useState } from "react";
 
-export interface SummaryCardItem {
-  id: string | number;
-  title: string;
-  content: string[];
+export interface SummaryStepItem {
+  id: number;
+  stepNumber: string;
+  image: string;
+  description: string;
 }
 
 interface SummaryFlipCardsProps {
-  cards?: SummaryCardItem[];
+  steps?: SummaryStepItem[];
 }
 
-const DEFAULT_CARDS: SummaryCardItem[] = [
+const DEFAULT_STEPS: SummaryStepItem[] = [
   {
-    id: "typiskt",
-    title: "Vad är typiskt för en sammanfattning?",
-    content: [
-      "En sammanfattning är kortare än originaltexten",
-      "Syftet är att återge det viktigaste i texten",
-      "Man skriver sammanfattningen med egna ord",
-      "Man lägger inte till några egna åsikter",
-      "Det viktigaste är att den som läser förstår innehållet",
-      "Skriv bara så att du själv förstår, d.v.s. använda egna ord",
-    ],
+    id: 1,
+    stepNumber: "Steg 1",
+    image: "/images/sammanfattning1.png",
+    description: "Stryk under svåra ord och red ut vad de betyder",
   },
   {
-    id: "steg",
-    title: "Gör så här! (Fem steg)",
-    content: [
-      "1. Läs texten noga och flera gånger (översätt ord du inte förstår)",
-      "2. Stryk under den information som du tycker är viktigast",
-      "3. Skriv ner det du har strukit under som stödord på ett papper",
-      "4. Prova att återberätta texten muntligt med hjälp av stödorden",
-      "5. Skriv ner en text med hjälp av stödorden (med egna ord)",
-    ],
+    id: 2,
+    stepNumber: "Steg 2",
+    image: "/images/sammanfattning2.png",
+    description: "Stryk under de viktigaste orden",
+  },
+  {
+    id: 3,
+    stepNumber: "Steg 3",
+    image: "/images/sammanfattning3.png",
+    description: "Skriv ner dina stödord",
+  },
+  {
+    id: 4,
+    stepNumber: "Steg 4",
+    image: "/images/sammanfattning4.png",
+    description: "Använd stödorden för att skriva din sammanfattning",
   },
 ];
 
-export default function SummaryFlipCards({ cards = DEFAULT_CARDS }: SummaryFlipCardsProps) {
-  const [flippedCards, setFlippedCards] = useState<Record<string | number, boolean>>({});
+export default function SummaryFlipCards({ steps = DEFAULT_STEPS }: SummaryFlipCardsProps) {
+  const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
 
-  const toggleFlip = (id: string | number) => {
+  const toggleFlip = (id: number) => {
     setFlippedCards((prev) => ({
       ...prev,
       [id]: !prev[id],
@@ -49,47 +51,96 @@ export default function SummaryFlipCards({ cards = DEFAULT_CARDS }: SummaryFlipC
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto my-4">
+    <div className="w-full max-w-5xl mx-auto p-4 sm:p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {cards.map((card) => {
-          const isFlipped = !!flippedCards[card.id];
+        {steps.map((step) => {
+          const isFlipped = !!flippedCards[step.id];
 
           return (
             <div
-              key={card.id}
-              onClick={() => toggleFlip(card.id)}
-              className="h-[380px] w-full [perspective:1000px] cursor-pointer group"
+              key={step.id}
+              onClick={() => toggleFlip(step.id)}
+              className="relative h-[480px] sm:h-[520px] [perspective:1000px] cursor-pointer group"
             >
               <div
                 className={`
-                  relative w-full h-full duration-500 rounded-3xl transition-transform
-                  [transform-style:preserve-3d] shadow-lg
+                  relative w-full h-full
+                  transition-transform duration-700
+                  [transform-style:preserve-3d]
                   ${isFlipped ? "[transform:rotateY(180deg)]" : ""}
                 `}
               >
-                {/* FRAMSIDA */}
-                <div className="absolute inset-0 [backface-visibility:hidden] rounded-3xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-6 flex flex-col items-center justify-center text-center">
-                  <span className="text-xs font-bold uppercase tracking-wider text-indigo-500 mb-3 bg-indigo-100 px-3 py-1 rounded-full">
-                    Klicka för att vända
-                  </span>
-                  <h3 className="text-2xl font-extrabold text-slate-800 leading-snug">
-                    {card.title}
-                  </h3>
+                {/* FRAMSIDAN (GRÖN SIDA MED INSTRUKTION) */}
+                <div
+                  className="
+                    absolute inset-0
+                    [backface-visibility:hidden]
+                    rounded-3xl border-4 border-emerald-400
+                    bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700
+                    shadow-xl overflow-hidden p-6 text-white flex flex-col justify-between
+                    transition-all group-hover:border-emerald-300
+                  "
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex items-center rounded-full bg-white/20 px-4 py-1 text-xs font-black uppercase tracking-wider text-emerald-50">
+                      {step.stepNumber}
+                    </span>
+                    <span className="text-xs font-semibold text-emerald-100 opacity-90">
+                      Klicka för att se exempel ↺
+                    </span>
+                  </div>
+
+                  <div className="my-auto rounded-2xl bg-white/15 border border-white/20 p-6 text-center">
+                    <p className="text-xs uppercase font-black tracking-widest text-emerald-100 mb-3">
+                      Instruktion
+                    </p>
+                    <p className="text-xl sm:text-2xl font-bold leading-relaxed text-white">
+                      {step.description}
+                    </p>
+                  </div>
+
+                  <div className="text-center pt-2">
+                    <span className="text-xs text-emerald-100 font-semibold opacity-80">
+                      Visa exempelbild ↺
+                    </span>
+                  </div>
                 </div>
 
-                {/* BAKSIDA */}
-                <div className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-3xl border-2 border-indigo-400 bg-white p-6 flex flex-col overflow-y-auto">
-                  <h4 className="text-lg font-bold text-indigo-900 border-b border-indigo-100 pb-2 mb-3">
-                    {card.title}
-                  </h4>
-                  <ul className="space-y-2 text-sm sm:text-base text-slate-700 leading-relaxed">
-                    {card.content.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-indigo-500 font-bold">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+                {/* BAKSIDAN (VIT SIDA MED BILD) */}
+                <div
+                  className="
+                    absolute inset-0
+                    [backface-visibility:hidden]
+                    [transform:rotateY(180deg)]
+                    rounded-3xl border-2 border-slate-200 p-5 sm:p-6
+                    flex flex-col bg-white shadow-lg transition-all
+                  "
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="inline-flex items-center rounded-full bg-indigo-50 px-3.5 py-1 text-sm font-extrabold text-indigo-700">
+                      {step.stepNumber} · Exempel
+                    </span>
+
+                    <span className="text-xs font-semibold text-slate-400 hover:text-indigo-600 transition-colors">
+                      Klicka för att vända tillbaka ↺
+                    </span>
+                  </div>
+
+                  {/* BILD-EXEMPEL */}
+                  <div className="relative flex-1 w-full my-2 rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 flex items-center justify-center p-2">
+                    <img
+                      src={step.image}
+                      alt={`${step.stepNumber} exempel`}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+
+                  {/* KORT BESKRIVNING UNDER BILDEN */}
+                  <div className="pt-3 border-t border-slate-100 text-center">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-800 leading-snug">
+                      {step.description}
+                    </h3>
+                  </div>
                 </div>
               </div>
             </div>

@@ -45,7 +45,7 @@ export const genrekunskap: ChapterConfig = {
         {
           id: "text-order-exercise-practice",
           type: "text-order-exercise",
-          title: "Lägg texten i rätt ordning",
+          title: "Hitta strukturen med Edda",
           props: {
             exercises: [
               {

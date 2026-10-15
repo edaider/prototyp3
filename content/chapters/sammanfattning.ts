@@ -22,8 +22,8 @@ export const sammanfattningChapter: ChapterConfig = {
         {
           id: "summary-flipcards",
           type: "summary-flip-cards",
-          title: "2. Kännetecken & Fem steg",
-          instructions: "Klicka på korten för att repetera reglerna och stegen.",
+          title: "Sammanfatta i fyra steg",
+          instructions: "Klicka på korten för att se vilka steg du ska ta.",
           props: {
             cards: [
               {
@@ -55,9 +55,7 @@ export const sammanfattningChapter: ChapterConfig = {
         {
           id: "summary-timed-memory",
           type: "timed-text-memory",
-          title: "3. Testa dig själv på tid",
-          instructions:
-            "Läs texten innan timern går ut. Därefter försvinner orden och du får använda stödorden som blir kvar för att minnas texten!",
+          title: "Samarbeta med Edda för att skriva en sammanfattning",
           props: {
             timerSeconds: 15,
             summaryPoints: [

@@ -11,7 +11,6 @@ export interface DiagnosticSummaryData {
     text: string;
     image?: string;
   };
-  instructions?: string;
 }
 
 interface DiagnosticSummaryProps {
@@ -20,18 +19,21 @@ interface DiagnosticSummaryProps {
 
 const DEFAULT_SUMMARY_DIAGNOSTIC: DiagnosticSummaryData = {
   textData: {
-    title: "Jordens öknar",
-    image: "/images/oknar.jpg",
-    text: `Öknarna är jordens torraste områden och finns i högtrycksområdena nära vändkretsarna. I en öken regnar det sällan mer än 250 mm/år, oftast koncentrerat till en mycket kort regntid. När regnet väl kommer är det som häftiga störtskurar som gör uttorkade flodbäddar till forsande floder. Regnen i öknarna är också opålitliga och vissa år uteblir de helt. I en öken kan det bli 55 grader varmt under dagen. Under natten däremot kan det bli kallt eftersom det inte finns någon vegetation eller några moln som kan hålla kvar värmen.`,
+    title: "SIMTÄVLINGEN",
+    image: "/images/simtavling.jpg",
+    text: `Linn hade tränat inför simtävlingen i fyra månader. Kvällen innan stod väskan packad vid dörren. På morgonen åt hon ingen frukost, fast mamma tjatade.
+
+I omklädningsrummet satt hon längst in i hörnet med hörlurarna på och stirrade på sina händer. Hon försökte fokusera på musikens taktslag, men tankarna flög hela tiden i väg till startpallen och det kalla vattnet.
+
+När startskottet slutligen ljöd var hon ändå först i vattnet. All tvekan försvann och ersattes av de invanda rörelserna hon tränat på så länge. När hon slog i kanten efter sista längden och såg upp mot resultattavlan insåg hon att hon hade sänkt sitt personliga rekord med två sekunder.`,
   },
-  instructions: "Läs texten om öknarna noggrant. Skriv därefter en egen sammanfattning där du återger det viktigaste med egna ord utan hjälp från AI-tutorn.",
 };
 
 export default function DiagnosticSummary({ data = DEFAULT_SUMMARY_DIAGNOSTIC }: DiagnosticSummaryProps) {
   const [summaryText, setSummaryText] = useState<string>("");
   const [submitted, setSubmitted] = useState<boolean>(false);
 
-  const { textData, instructions } = data;
+  const { textData } = data;
 
   const handleSubmit = () => {
     if (!summaryText.trim()) return;
@@ -93,13 +95,7 @@ export default function DiagnosticSummary({ data = DEFAULT_SUMMARY_DIAGNOSTIC }:
           </div>
         </div>
 
-        <div className="p-6 md:p-8 space-y-8">
-          {instructions && (
-            <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 text-sm text-amber-950 font-medium">
-              💡 {instructions}
-            </div>
-          )}
-
+        <div className="p-6 md:p-8 space-y-6">
           {textData.image && (
             <div className="overflow-hidden rounded-2xl border border-slate-200 max-h-64">
               <img src={textData.image} alt={textData.title} className="w-full h-full object-cover" />
