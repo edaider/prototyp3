@@ -9,6 +9,7 @@ import { ReadingComprehension } from "./ReadingComprehension";
 import { BetweenLines } from "./BetweenLines";
 import { Quiz } from "./Quiz";
 
+import EddaVideoIntro from "./EddaVideoIntro";
 import TextTypesCards from "./TextTypesCards";
 import RecognizeCards from "./RecognizeCards";
 import TextOrderExercise from "./TextOrderExercise";
@@ -26,6 +27,9 @@ export function ActivityRenderer({ activity, mode }: Props) {
 
   const renderActivityContent = () => {
     switch (activity.type) {
+      case "edda-video-intro":
+        return <EddaVideoIntro {...activity.props} />;
+
       case "flashcards":
         return <Flashcards activity={activity} />;
 
@@ -87,7 +91,7 @@ export function ActivityRenderer({ activity, mode }: Props) {
 
   return (
     <div className="relative w-full rounded-2xl border border-slate-200/80 bg-white/98 p-6 text-slate-900 shadow-2xl backdrop-blur-md md:p-10">
-      {activity.title && (
+      {activity.title && activity.type !== "edda-video-intro" && (
         <h2 className="mb-3 text-2xl font-bold">
           {activity.title}
         </h2>

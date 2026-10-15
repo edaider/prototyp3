@@ -19,9 +19,9 @@ export const resonemang: ChapterConfig = {
           title: "Förmågor – Läs på och mellan raderna",
           instructions: "Lär dig skillnaden mellan direkt information och att dra egna slutsatser.",
           content: {
-            title: "Läs på eller mellan raderna",
+            title: "Testa om du kan läsa på eller mellan raderna",
             text: "Linn hade tränat inför simtävlingen i fyra månader. Kvällen innan stod väskan packad vid dörren. På morgonen åt hon ingen frukost, fast mamma tjatade.",
-            image: "/images/swimming-girl.png",
+            image: "/images/simtavling.jpg",
             questions: [
               {
                 title: "Hur länge har Linn tränat?",

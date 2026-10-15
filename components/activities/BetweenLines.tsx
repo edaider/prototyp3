@@ -35,17 +35,15 @@ export function BetweenLines({ activity }: Props) {
   const [q1Answer, setQ1Answer] = useState<number | null>(null);
   const [q2Answer, setQ2Answer] = useState<number | null>(null);
 
-  const title = content?.title || "Läs på eller mellan raderna";
+  const title = content?.title || "Testa om du kan läsa på eller mellan raderna";
   const imageSrc = content?.imageSrc || "/mellanraderna.png";
   const excerpt = content?.excerpt;
   const leftQ = content?.leftQuestion;
   const rightQ = content?.rightQuestion;
 
   return (
-    <div className="w-full bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-8">
-      <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight text-center">
-        {title}
-      </h2>
+    <div className="w-full bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-sm">
+      {/* Rubriken har tagits bort härifrån för att inte visas dubbelt */}
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-start gap-6 md:gap-8">
         {/* VÄNSTER FRÅGA */}
@@ -99,15 +97,15 @@ export function BetweenLines({ activity }: Props) {
           </div>
         )}
 
-        {/* MITTENSEKTION MED BILD OCH CITERAD TEXT */}
-        <div className="flex flex-col items-center text-center space-y-3">
+        {/* MITTENSEKTION MED BILD OCH CITERAD TEXT (Textrutan flyttad närmare bilden) */}
+        <div className="flex flex-col items-center text-center gap-2">
           <img
             src={imageSrc}
             alt={title}
-            className="mx-auto w-full max-w-[320px] h-auto object-contain rounded-xl"
+            className="mx-auto w-full max-w-[280px] h-auto object-contain rounded-xl"
           />
           {excerpt && (
-            <p className="text-xs sm:text-sm text-slate-600 max-w-[280px] italic leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100">
+            <p className="text-xs sm:text-sm text-slate-600 max-w-[280px] italic leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100 shadow-xs">
               "{excerpt}"
             </p>
           )}

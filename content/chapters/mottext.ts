@@ -15,9 +15,18 @@ export const mottext: ChapterConfig = {
 
       activities: [
         {
+          id: "mota-text-edda-video",
+          type: "edda-video-intro",
+          title: "Lyssna på vad Edda har att lära dig om lästeknik",
+          props: {
+            videoSrc: "/videos/lästeknik.mp4",
+            title: "Lyssna på vad Edda har att lära dig",
+          },
+        },
+        {
           id: "mota-text-technique",
           type: "reading-technique",
-          title: "Lästeknik – Simtävlingen",
+          title: "Prova nu att läsa texten själv",
           instructions:
             "Följ med i texten och se hur du ställvis stannar upp för att titta, skapa inre bilder och red ut svåra ord.",
           content: {
@@ -56,11 +65,9 @@ export const mottext: ChapterConfig = {
         {
           id: "mota-text-between-lines",
           type: "reading-strategies",
-          title: "Läs på eller mellan raderna",
-          instructions: "Se skillnaden mellan fakta som står direkt i texten och slutsatser du drar själv.",
+          title: "Testa om du kan läsa på eller mellan raderna",
           content: {
-            title: "Läs på eller mellan raderna",
-            imageSrc: "/mellanraderna.png",
+            imageSrc: "images/mellanraderna.png",
             excerpt: "Linn hade tränat inför simtävlingen i fyra månader. Kvällen innan stod väskan packad vid dörren. På morgonen åt hon ingen frukost, fast mamma tjatade.",
             leftQuestion: {
               title: "Hur länge har Linn tränat?",

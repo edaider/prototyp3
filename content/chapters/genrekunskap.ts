@@ -6,7 +6,7 @@ export const genrekunskap: ChapterConfig = {
   subtitle: "Upptäck hur olika texter är uppbyggda och vad som kännetecknar dem",
 
   rooms: {
-    // STUDERA: TextTypesCards och RecognizeCards
+    // STUDERA: EddaVideoIntro, TextTypesCards och RecognizeCards
     study: {
       title: "Studera – Lär känna texttyperna",
       description:
@@ -14,14 +14,23 @@ export const genrekunskap: ChapterConfig = {
 
       activities: [
         {
+          id: "edda-video-intro-study",
+          type: "edda-video-intro",
+          title: "Lyssna på vad Edda har att lära dig",
+          props: {
+            videoSrc: "/videos/texttyper.mp4",
+            title: "Lyssna på vad Edda har att lära dig",
+          },
+        },
+        {
           id: "text-types-cards-study",
           type: "text-types-cards",
-          title: "Lär känna texttyperna",
+          title: "Repetera texttyperna för dig själv",
         },
         {
           id: "recognize-cards-study",
           type: "recognize-cards",
-          title: "Känn igen texttypen",
+          title: "Testa dig själv på att känna igen texttyper",
         },
       ],
     },

@@ -14,7 +14,10 @@ import {
   Layers,
   Sparkles,
   Swords,
+  HelpCircle,
 } from "lucide-react";
+
+import FordiagnosModal from "@/components/activities/FordiagnosModal"; // Justera sökvägen om du sparar komponenten annanstans
 
 const mapNodes = [
   {
@@ -108,6 +111,10 @@ export default function App() {
   const [videoReady, setVideoReady] = useState(false);
   const [videoVisible, setVideoVisible] = useState(false);
 
+  // Tillstånd för fördiagnos-modalen (Öppen som standard)
+  const [showFordiagnos, setShowFordiagnos] = useState(true);
+  const [studentData, setStudentData] = useState<{ profile: string; dragon: string } | null>(null);
+
   useEffect(() => {
     if (!videoReady) return;
 
@@ -120,6 +127,25 @@ export default function App() {
 
   return (
     <main className="relative h-screen w-full overflow-hidden bg-amber-950/20">
+      {/* Fördiagnos Modal (Ligger överst när showFordiagnos = true) */}
+      <FordiagnosModal
+        isOpen={showFordiagnos}
+        onClose={() => setShowFordiagnos(false)}
+        onSave={(data) => {
+          setStudentData(data);
+          console.log("Vald profil och drake:", data);
+        }}
+      />
+
+      {/* Knapp för att öppna fördiagnosen igen */}
+      <button
+        onClick={() => setShowFordiagnos(true)}
+        className="absolute top-4 left-4 z-30 flex items-center gap-2 rounded-xl border border-amber-500/50 bg-stone-900/80 px-3.5 py-2 text-xs font-bold text-amber-200 shadow-lg backdrop-blur-md hover:bg-amber-900/80 hover:border-amber-400 transition-all"
+      >
+        <HelpCircle className="h-4 w-4 text-amber-400" />
+        Fördiagnos & Drake
+      </button>
+
       {/* Stillbild som alltid ligger bakom videon */}
       <img
         src="/images/lärstigen-stillbild.jpg"
@@ -171,7 +197,6 @@ export default function App() {
           preserveAspectRatio="none"
           viewBox="0 0 1000 600"
         >
-          {/* Yttre mjuk skugga */}
           <path
             d="M 180 456 C 250 510, 290 535, 340 540 C 480 550, 580 560, 700 552 C 770 540, 800 480, 760 372 C 710 370, 640 380, 580 402 C 540 415, 530 300, 530 258 C 450 280, 370 290, 310 300 C 220 320, 160 270, 140 252 C 115 220, 110 170, 110 156 C 105 110, 95 80, 80 60"
             fill="none"
@@ -179,8 +204,6 @@ export default function App() {
             strokeWidth="14"
             strokeLinecap="round"
           />
-
-          {/* Prickad guldväg */}
           <path
             d="M 180 456 C 250 510, 290 535, 340 540 C 480 550, 580 560, 700 552 C 770 540, 800 480, 760 372 C 710 370, 640 380, 580 402 C 540 415, 530 300, 530 258 C 450 280, 370 290, 310 300 C 220 320, 160 270, 140 252 C 115 220, 110 170, 110 156 C 105 110, 95 80, 80 60"
             fill="none"
@@ -208,11 +231,9 @@ export default function App() {
               className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center pointer-events-auto group focus:outline-none"
             >
               {node.active ? (
-                /* Aktiv knopp - Brun slottsskylt med guldglöd */
                 <div className="flex flex-col items-center animate-bounce-slow">
                   <div className="relative flex h-13 w-13 items-center justify-center rounded-full bg-gradient-to-tr from-amber-700 via-amber-500 to-yellow-300 p-0.5 shadow-lg shadow-amber-950/60 border border-amber-300/80 transition-transform group-hover:scale-110">
                     <div className="absolute -inset-1 animate-ping rounded-full bg-amber-400/20 blur-xs" />
-
                     <div className="relative flex h-full w-full items-center justify-center rounded-full bg-gradient-to-b from-amber-600 to-amber-900 text-amber-100">
                       <Sparkles className="h-6 w-6 text-amber-200 fill-amber-200/50" />
                     </div>
@@ -224,7 +245,6 @@ export default function App() {
                   </span>
                 </div>
               ) : node.isBoss ? (
-                /* Slutbattle - Dov mörkbrun/röd träskylt */
                 <div className="flex flex-col items-center">
                   <span className="mb-1.5 flex items-center gap-1.5 rounded-lg border border-rose-900/80 bg-gradient-to-b from-stone-900/90 via-rose-950/80 to-stone-950/95 px-3 py-1 text-xs font-black tracking-wide text-rose-200 shadow-md backdrop-blur-md transition-all group-hover:scale-105 group-hover:border-rose-600">
                     <Icon className="h-4 w-4 text-rose-400 animate-pulse" />
@@ -236,7 +256,6 @@ export default function App() {
                   </div>
                 </div>
               ) : (
-                /* Inaktiv knopp - Subtil mörkbrun trä-skylt */
                 <div className="flex flex-col items-center">
                   <span className="mb-1.5 flex max-w-56 items-center gap-1.5 rounded-md border border-amber-900/40 bg-gradient-to-b from-stone-900/80 to-stone-950/85 px-2.5 py-1 text-xs font-semibold text-amber-200/80 shadow-sm backdrop-blur-xs transition-all group-hover:scale-105 group-hover:border-amber-700/60 group-hover:bg-stone-900/95 group-hover:text-amber-100">
                     <Icon className="h-3.5 w-3.5 shrink-0 text-amber-500/70 group-hover:text-amber-400" />
