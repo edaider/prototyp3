@@ -14,6 +14,9 @@ import TextTypesCards from "./TextTypesCards";
 import RecognizeCards from "./RecognizeCards";
 import TextOrderExercise from "./TextOrderExercise";
 
+// Komponenter för Känna igen texttyper / Genrekunskap
+import TextTypesDiagnosis from "./TextTypesDiagnosis";
+
 // Komponenter för Föra Resonemang
 import CharacterCards from "./CharacterCards";
 import UnderstandQuestion from "./UnderstandQuestion";
@@ -93,6 +96,10 @@ export function ActivityRenderer({ activity, mode }: Props) {
       case "recognize-cards":
         return <RecognizeCards {...(activity.props || {})} />;
 
+      case "text-type-diagnosis":
+      case "text-types-diagnosis":
+        return <TextTypesDiagnosis {...(activity.props || {})} />;
+
       case "text-order-exercise": {
         const exercises = activity.props?.exercises;
 
@@ -130,17 +137,24 @@ export function ActivityRenderer({ activity, mode }: Props) {
 
   return (
     <div className="relative w-full rounded-2xl border border-slate-200/80 bg-white/98 p-6 text-slate-900 shadow-2xl backdrop-blur-md md:p-10">
-      {activity.title && activity.type !== "edda-video-intro" && activity.type !== "diagnostic-text" && activity.type !== "summary-diagnosis" && (
-        <h2 className="mb-3 text-2xl font-bold">
-          {activity.title}
-        </h2>
-      )}
+      {activity.title &&
+        activity.type !== "edda-video-intro" &&
+        activity.type !== "diagnostic-text" &&
+        activity.type !== "summary-diagnosis" &&
+        activity.type !== "text-types-diagnosis" &&
+        activity.type !== "text-type-diagnosis" && (
+          <h2 className="mb-3 text-2xl font-bold">{activity.title}</h2>
+        )}
 
-      {activity.instructions && activity.type !== "diagnostic-text" && activity.type !== "summary-diagnosis" && (
-        <p className="mb-6 leading-relaxed text-slate-600">
-          {activity.instructions}
-        </p>
-      )}
+      {activity.instructions &&
+        activity.type !== "diagnostic-text" &&
+        activity.type !== "summary-diagnosis" &&
+        activity.type !== "text-types-diagnosis" &&
+        activity.type !== "text-type-diagnosis" && (
+          <p className="mb-6 leading-relaxed text-slate-600">
+            {activity.instructions}
+          </p>
+        )}
 
       <div>{renderActivityContent()}</div>
     </div>

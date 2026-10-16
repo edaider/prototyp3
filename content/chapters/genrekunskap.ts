@@ -165,7 +165,7 @@ export const genrekunskap: ChapterConfig = {
     },
 
     // DIAGNOS: TextTypeDiagnosis
-    diagnosis: {
+   diagnosis: {
       title: "Diagnos – Visa vad du kan",
       description:
         "Läs eller undersök varje exempel och identifiera om det är skönlitteratur, sakprosa eller en multimodal text.",
@@ -173,7 +173,7 @@ export const genrekunskap: ChapterConfig = {
       activities: [
         {
           id: "text-types-diagnosis",
-          type: "diagnostic-text",
+          type: "text-type-diagnosis",
           title: "Vilken texttyp är det?",
           instructions:
             "Läs texten och välj om den är skönlitteratur, sakprosa eller multimodal text.",

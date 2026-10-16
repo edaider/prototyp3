@@ -90,14 +90,6 @@ export default function TimedTextMemory({
   return (
     <div className="w-full max-w-3xl mx-auto my-6 p-6 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-sm space-y-6">
       <div className="space-y-1 text-left border-b border-slate-100 pb-4">
-        <div className="flex items-center gap-2">
-          <span className="px-3 py-1 bg-amber-100 text-amber-900 rounded-full text-xs font-bold uppercase tracking-wider">
-            Steg för steg
-          </span>
-          <span className="text-xs text-slate-400 font-semibold">
-            Välj {maxWords} viktigaste orden
-          </span>
-        </div>
         <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 pt-1">
           Välj stödord ur texten
         </h2>
@@ -176,7 +168,7 @@ export default function TimedTextMemory({
 
       {/* AI-Genererad sammanfattning */}
       {aiSummary && (
-        <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-left space-y-2 animate-fadeIn">
+        <div className="p-5 rounded-2xl bg-white border border-emerald-200 text-left space-y-2 animate-fadeIn">
           <div className="flex items-center gap-2 text-emerald-800 font-bold text-sm">
             <CheckCircle2 size={16} className="text-emerald-600" />
             <span>Eddas sammanfattning utifrån dina ord:</span>

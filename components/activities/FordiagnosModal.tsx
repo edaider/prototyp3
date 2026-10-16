@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { X, Sparkles, Check, Flame, Award, BookOpen } from "lucide-react";
+import { X, Check, Flame, Award, BookOpen, Heart } from "lucide-react";
 
 interface FordiagnosModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave?: (data: { profile: string; dragon: string }) => void;
+  onSave?: (data: { profile: string; dragon: string; interest: string }) => void;
 }
 
 const dragons = [
@@ -36,16 +36,29 @@ const profiles = [
   },
 ];
 
+const interests = [
+  { id: "fotboll", title: "Fotboll", src: "/images/fotboll.png" },
+  { id: "gaming", title: "Gaming", src: "/images/gaming.png" },
+  { id: "socialamedier", title: "Sociala medier", src: "/images/socialamedier.png" },
+];
+
 export default function FordiagnosModal({ isOpen, onClose, onSave }: FordiagnosModalProps) {
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
   const [selectedDragon, setSelectedDragon] = useState<string | null>(null);
+  const [selectedInterest, setSelectedInterest] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
+  const isFormValid = selectedProfile && selectedDragon && selectedInterest;
+
   const handleComplete = () => {
-    if (!selectedProfile || !selectedDragon) return;
+    if (!isFormValid) return;
     if (onSave) {
-      onSave({ profile: selectedProfile, dragon: selectedDragon });
+      onSave({
+        profile: selectedProfile,
+        dragon: selectedDragon,
+        interest: selectedInterest,
+      });
     }
     onClose();
   };
@@ -159,13 +172,52 @@ export default function FordiagnosModal({ isOpen, onClose, onSave }: FordiagnosM
           </div>
         </div>
 
+        {/* Steg 3: Välj Intresseområde */}
+        <div className="mt-6 space-y-3">
+          <h3 className="text-sm font-bold text-amber-300 uppercase tracking-wider flex items-center gap-2">
+            <Heart className="h-4 w-4 text-amber-400" /> Steg 3: Vilka är dina intresseområden?
+          </h3>
+          <div className="grid grid-cols-3 gap-3 md:gap-4">
+            {interests.map((item) => {
+              const isSelected = selectedInterest === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setSelectedInterest(item.id)}
+                  className={`relative flex flex-col items-center justify-between p-3 rounded-xl border transition-all ${
+                    isSelected
+                      ? "border-amber-400 bg-amber-950/80 shadow-lg shadow-amber-500/20 scale-[1.02]"
+                      : "border-stone-800 bg-stone-900/60 hover:border-amber-700/60 hover:bg-stone-900"
+                  }`}
+                >
+                  {isSelected && (
+                    <div className="absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-amber-400 text-stone-950">
+                      <Check className="h-3.5 w-3.5 stroke-[3]" />
+                    </div>
+                  )}
+                  <div className="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center my-1">
+                    <img
+                      src={item.src}
+                      alt={item.title}
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                  <span className="text-xs md:text-sm font-bold text-amber-200 mt-2">
+                    {item.title}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Starta Äventyret-knapp */}
         <div className="mt-8 flex justify-end">
           <button
-            disabled={!selectedProfile || !selectedDragon}
+            disabled={!isFormValid}
             onClick={handleComplete}
             className={`w-full md:w-auto px-6 py-3 rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg flex items-center justify-center gap-2 ${
-              selectedProfile && selectedDragon
+              isFormValid
                 ? "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 shadow-amber-500/20 cursor-pointer"
                 : "bg-stone-800 text-stone-500 cursor-not-allowed"
             }`}

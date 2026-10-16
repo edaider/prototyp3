@@ -98,7 +98,7 @@ const mapNodes = [
     title: "10. SLUTSTRID",
     top: "10%",
     left: "8%",
-    path: "/slutbattle",
+    path: "/slutstrid",
     icon: Swords,
     isBoss: true,
   },

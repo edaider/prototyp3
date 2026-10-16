@@ -117,17 +117,17 @@ export default function SummaryFlipCards({ steps = DEFAULT_STEPS }: SummaryFlipC
                   "
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="inline-flex items-center rounded-full bg-indigo-50 px-3.5 py-1 text-sm font-extrabold text-indigo-700">
+                    <span className="inline-flex items-center rounded-full bg-indigo-50 px-3.5 py-1 text-sm font-extrabold text-black">
                       {step.stepNumber} · Exempel
                     </span>
 
-                    <span className="text-xs font-semibold text-slate-400 hover:text-indigo-600 transition-colors">
+                    <span className="text-xs font-semibold text-slate-400 hover:text-black transition-colors">
                       Klicka för att vända tillbaka ↺
                     </span>
                   </div>
 
                   {/* BILD-EXEMPEL */}
-                  <div className="relative flex-1 w-full my-2 rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 flex items-center justify-center p-2">
+                  <div className="relative flex-1 w-full my-2 rounded-2xl overflow-hidden bg-white border border-slate-100 flex items-center justify-center p-2">
                     <img
                       src={step.image}
                       alt={`${step.stepNumber} exempel`}
