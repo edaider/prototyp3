@@ -19,11 +19,11 @@ export function ChapterLayout({ chapter }: Props) {
   function getRoomConfig(s: Step): RoomConfig | undefined {
     let rawRoom: Record<string, unknown> | undefined;
 
-    // 1. Om kapitlet använder den vanliga rooms-strukturen (t.ex. genrekunskap)
+    // 1. Om kapitlet använder den vanliga rooms-strukturen
     if (chapter.rooms && chapter.rooms[s]) {
       rawRoom = chapter.rooms[s] as unknown as Record<string, unknown>;
     } else {
-      // 2. Om kapitlet har direktfälten study/practice/diagnosis (t.ex. förresonemang)
+      // 2. Om kapitlet har direktfälten study/practice/diagnosis
       const rawChapter = chapter as unknown as Record<string, unknown>;
       rawRoom = rawChapter[s] as Record<string, unknown> | undefined;
     }
@@ -47,7 +47,10 @@ export function ChapterLayout({ chapter }: Props) {
     return {
       title: (rawRoom.title as string) || chapter.title,
       description: rawRoom.description as string,
-      // Kombinera båda så att allt nytt innehåll syns!
+      // Se till att bakgrunderna följer med till RoomView!
+      backgroundImage: rawRoom.backgroundImage as string,
+      backgroundVideo: rawRoom.backgroundVideo as string,
+      introduction: rawRoom.introduction as string,
       activities: [...existingActivities, ...convertedSections],
       activeFigureKey: rawRoom.activeFigureKey as RoomConfig["activeFigureKey"],
       question: rawRoom.question as string,

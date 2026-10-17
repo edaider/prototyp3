@@ -1,15 +1,26 @@
-import type { TextOrderExerciseItem } from "@/components/activities/TextOrderExercise";
-import type { TextTypeCardItem } from "@/components/activities/TextTypesCards";
-import type { RecognizeCardItem } from "@/components/activities/RecognizeCards";
-import type { TextTypesDiagnosisItem } from "@/components/activities/TextTypesDiagnosis";
-import type { SummaryCardItem } from "@/components/activities/SummaryFlipCards";
-import type { TimedWord } from "@/components/activities/TimedTextMemory";
-
-// 1. Lägg till dina nya aktivitetstyper här
+// 1. Alla aktivitetstyper i systemet
 export type ActivityType =
   | "edda-video-intro"
+  | "text-genre-table"
+  | "genre-words-explained"
+  | "presentation-words-explained"
+  | "discussion-tips"
+  | "discussion-checklist"
+  | "correct-text"
+  | "writing-log-practise-correct"
+  | "diagnostic-correct"
+  | "writing-log-practise-argumentative"
+  | "oral-presentation-prep"
+  | "diagnostic-argumentative"
+  | "full-screen-video"
   | "summary-flip-cards"
   | "timed-text-memory"
+  | "summary-writing-practice"
+  | "summary-diagnosis"
+  | "citation-flip-cards"
+  | "citation-tutor-exercise"
+  | "writing-log-practise-report"
+  | "diagnostic-report"
   | "flashcards"
   | "writing-input"
   | "ai-tutor"
@@ -22,25 +33,200 @@ export type ActivityType =
   | "quiz"
   | "character-cards"
   | "reading-skills-cards"
+  | "reading-skill-cards"
   | "understand-question"
   | "resonemang-cards"
   | "controll-answer"
+  | "writing-log-practice"
   | "writing-log-practise"
   | "diagnostic-text"
   | "text-types-cards"
   | "recognize-cards"
-  | "text-order-exercise";
+  | "text-order-exercise"
+  | "text-type-diagnosis"
+  | "text-types-diagnosis";
 
-// 2. Specifika typer för aktiviteter med kända props
+// 2. Specifika typer för aktiviteter med kända props/content
+
 export type EddaVideoActivity = {
   id: string;
   type: "edda-video-intro";
   title?: string;
   instructions?: string;
+  content?: {
+    videoSrc?: string;
+    caption?: string;
+  };
   props?: {
     title?: string;
     videoSrc?: string;
   };
+};
+
+export type DiscussionTipsActivity = {
+  id: string;
+  type: "discussion-tips";
+  title?: string;
+  instructions?: string;
+  content?: Record<string, unknown>;
+  props?: Record<string, unknown>;
+};
+
+export type DiscussionChecklistActivity = {
+  id: string;
+  type: "discussion-checklist";
+  title?: string;
+  instructions?: string;
+  content?: Record<string, unknown>;
+  props?: {
+    items?: Array<{ id: number; text: string }>;
+  };
+};
+
+export type CorrectTextActivity = {
+  id: string;
+  type: "correct-text";
+  title?: string;
+  instructions?: string;
+  content?: {
+    title?: string;
+    instructions?: string;
+  };
+  props?: Record<string, unknown>;
+};
+
+export type WritingLogPractiseCorrectActivity = {
+  id: string;
+  type: "writing-log-practise-correct";
+  title?: string;
+  instructions?: string;
+  content?: {
+    question?: string;
+    initialText?: string;
+    imageSrc?: string;
+    imageAlt?: string;
+  };
+  props?: Record<string, unknown>;
+};
+
+export type DiagnosticCorrectActivity = {
+  id: string;
+  type: "diagnostic-correct";
+  title?: string;
+  instructions?: string;
+  content?: {
+    textData?: {
+      title: string;
+      text: string;
+      image?: string;
+    };
+  };
+  props?: Record<string, unknown>;
+};
+
+export type TextGenreTableActivity = {
+  id: string;
+  type: "text-genre-table";
+  title?: string;
+  instructions?: string;
+  content?: {
+    genres?: Array<{
+      id: string;
+      name: string;
+      purpose: string;
+      features: string[];
+      examples: string[];
+    }>;
+  };
+  props?: Record<string, unknown>;
+};
+
+export type GenreWordsExplainedActivity = {
+  id: string;
+  type: "genre-words-explained";
+  title?: string;
+  instructions?: string;
+  content?: {
+    categories?: string[];
+    terms?: Array<{
+      id: string;
+      term: string;
+      category: string;
+      definition: string;
+      example?: string;
+    }>;
+  };
+  props?: Record<string, unknown>;
+};
+
+export type PresentationWordsExplainedActivity = {
+  id: string;
+  type: "presentation-words-explained";
+  title?: string;
+  instructions?: string;
+  content?: {
+    categories?: string[];
+    terms?: Array<{
+      id: string;
+      term: string;
+      category: string;
+      definition: string;
+      example?: string;
+    }>;
+  };
+  props?: Record<string, unknown>;
+};
+
+export type WritingLogPractiseArgumentativeActivity = {
+  id: string;
+  type: "writing-log-practise-argumentative";
+  title?: string;
+  instructions?: string;
+  content?: {
+    question?: string;
+    initialText?: string;
+    imageSrc?: string;
+    imageAlt?: string;
+  };
+  props?: Record<string, unknown>;
+};
+
+export type OralPresentationPrepActivity = {
+  id: string;
+  type: "oral-presentation-prep";
+  title?: string;
+  instructions?: string;
+  content?: {
+    title?: string;
+  };
+  props?: Record<string, unknown>;
+};
+
+export type DiagnosticArgumentativeActivity = {
+  id: string;
+  type: "diagnostic-argumentative";
+  title?: string;
+  instructions?: string;
+  content?: {
+    textData?: {
+      title: string;
+      text: string;
+      image?: string;
+    };
+  };
+  props?: Record<string, unknown>;
+};
+
+export type FullScreenVideoActivity = {
+  id: string;
+  type: "full-screen-video";
+  title?: string;
+  instructions?: string;
+  content?: {
+    videoSrc?: string;
+    title?: string;
+  };
+  props?: Record<string, unknown>;
 };
 
 export type SummaryFlipCardsActivity = {
@@ -49,7 +235,11 @@ export type SummaryFlipCardsActivity = {
   title?: string;
   instructions?: string;
   props?: {
-    cards?: SummaryCardItem[];
+    cards?: Array<{
+      id: string | number;
+      front: string;
+      back: string;
+    }>;
   };
 };
 
@@ -60,9 +250,34 @@ export type TimedTextMemoryActivity = {
   instructions?: string;
   props?: {
     timerSeconds?: number;
-    words?: TimedWord[];
+    words?: Array<{ id: number; text: string }>;
     summaryPoints?: string[];
   };
+};
+
+export type WritingLogPractiseReportActivity = {
+  id: string;
+  type: "writing-log-practise-report";
+  title?: string;
+  instructions?: string;
+  props?: {
+    question?: string;
+    initialText?: string;
+    author?: string;
+    year?: string;
+    source?: string;
+    imageSrc?: string;
+    imageAlt?: string;
+  };
+};
+
+export type DiagnosticReportActivity = {
+  id: string;
+  type: "diagnostic-report";
+  title?: string;
+  instructions?: string;
+  content?: Record<string, unknown>;
+  props?: Record<string, unknown>;
 };
 
 export type TextOrderActivity = {
@@ -71,7 +286,7 @@ export type TextOrderActivity = {
   title?: string;
   instructions?: string;
   props: {
-    exercises: TextOrderExerciseItem[];
+    exercises: Array<Record<string, unknown>>;
   };
 };
 
@@ -81,7 +296,7 @@ export type TextTypesCardsActivity = {
   title?: string;
   instructions?: string;
   props?: {
-    cards?: TextTypeCardItem[];
+    cards?: Array<any>;
   };
 };
 
@@ -91,8 +306,17 @@ export type RecognizeCardsActivity = {
   title?: string;
   instructions?: string;
   props?: {
-    cards?: RecognizeCardItem[];
+    cards?: Array<any>;
   };
+};
+
+export type ReadingSkillsCardsActivity = {
+  id: string;
+  type: "reading-skills-cards" | "reading-skill-cards";
+  title?: string;
+  instructions?: string;
+  content?: Record<string, unknown>;
+  props?: Record<string, unknown>;
 };
 
 export type DiagnosticTextActivity = {
@@ -100,8 +324,9 @@ export type DiagnosticTextActivity = {
   type: "diagnostic-text";
   title?: string;
   instructions?: string;
+  content?: Record<string, unknown>;
   props?: {
-    items?: TextTypesDiagnosisItem[];
+    items?: Array<Record<string, unknown>>;
   };
 };
 
@@ -111,11 +336,27 @@ export type GenericActivity = {
   type: Exclude<
     ActivityType,
     | "edda-video-intro"
+    | "discussion-tips"
+    | "discussion-checklist"
+    | "correct-text"
+    | "writing-log-practise-correct"
+    | "diagnostic-correct"
+    | "text-genre-table"
+    | "genre-words-explained"
+    | "presentation-words-explained"
+    | "writing-log-practise-argumentative"
+    | "oral-presentation-prep"
+    | "diagnostic-argumentative"
+    | "full-screen-video"
     | "summary-flip-cards"
     | "timed-text-memory"
+    | "writing-log-practise-report"
+    | "diagnostic-report"
     | "text-order-exercise"
     | "text-types-cards"
     | "recognize-cards"
+    | "reading-skills-cards"
+    | "reading-skill-cards"
     | "diagnostic-text"
   > | string;
   title?: string;
@@ -128,15 +369,30 @@ export type GenericActivity = {
 // 4. Den kompletta unionen
 export type ActivityConfig =
   | EddaVideoActivity
+  | DiscussionTipsActivity
+  | DiscussionChecklistActivity
+  | CorrectTextActivity
+  | WritingLogPractiseCorrectActivity
+  | DiagnosticCorrectActivity
+  | TextGenreTableActivity
+  | GenreWordsExplainedActivity
+  | PresentationWordsExplainedActivity
+  | WritingLogPractiseArgumentativeActivity
+  | OralPresentationPrepActivity
+  | DiagnosticArgumentativeActivity
+  | FullScreenVideoActivity
   | SummaryFlipCardsActivity
   | TimedTextMemoryActivity
+  | WritingLogPractiseReportActivity
+  | DiagnosticReportActivity
   | TextOrderActivity
   | TextTypesCardsActivity
   | RecognizeCardsActivity
+  | ReadingSkillsCardsActivity
   | DiagnosticTextActivity
   | GenericActivity;
 
-// 5. Kapitelsystemet (Stödjer NU BÅDE "activities"-array och "rooms"-objekt)
+// 5. Kapitelsystemet
 export type ChapterSection = {
   id: string;
   title: string;
@@ -181,29 +437,9 @@ export type ChapterConfig = {
   id: string;
   title: string;
   subtitle?: string;
-  description?: string;
-
-  intro?: {
-    video: string;
-    poster: string;
-  };
-
-  survey?: {
-    title: string;
-    questions: {
-      id: string;
-      prompt: string;
-      options: string[];
-    }[];
-  };
-
-  // Platt lista med aktiviteter ELLER rumsuppdelning
-  activities?: ActivityConfig[];
-  rooms?: {
+  rooms: {
     study: RoomConfig;
     practice: RoomConfig;
-    diagnosis?: RoomConfig;
+    diagnosis: RoomConfig;
   };
 };
-
-export type ChapterData = ChapterConfig;

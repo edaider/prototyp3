@@ -28,7 +28,7 @@ export const mottext: ChapterConfig = {
           type: "reading-technique",
           title: "Prova nu att läsa texten själv",
           instructions:
-            "Följ med i texten och se hur du ställvis stannar upp för att titta, skapa inre bilder och red ut svåra ord.",
+            "Följ med i texten och se hur du stegvis stannar upp för att titta, skapa inre bilder och red ut svåra ord.",
           content: {
             title: "Simtävlingen",
             category: "Lästeknik",

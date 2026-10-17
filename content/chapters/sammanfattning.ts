@@ -100,7 +100,7 @@ export const sammanfattningChapter: ChapterConfig = {
       ],
     },
     practice: {
-      title: "Träna: Skriv med AI-stöd",
+      title: "Träna: Skriv med Eddas stöd",
       description: "Skriv en sammanfattning och få direktfeedback från din AI-tutor.",
       activities: [
         {

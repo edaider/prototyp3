@@ -74,7 +74,7 @@ const mapNodes = [
     title: "7. Samtala och diskutera",
     top: "50%",
     left: "31%",
-    path: "/samtala-och-diskutera",
+    path: "/samtal-och-diskussion",
     icon: Users,
   },
   {
@@ -85,12 +85,12 @@ const mapNodes = [
     path: "/skriva-korrekt",
     icon: Layers,
   },
-  {
+ {
     id: 9,
     title: "9. Bygga en fungerande text",
     top: "26%",
     left: "11%",
-    path: "/bygga-text",
+    path: "/bygga-en-text", 
     icon: CheckCircle2,
   },
   {
