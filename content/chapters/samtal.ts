@@ -68,7 +68,7 @@ export const samtal: ChapterConfig = {
     diagnosis: {
       title: "Fängelsehålan",
       backgroundImage: "/images/fängelsehåla.jpeg",
-      backgroundVideo: "/videos/fängelsehålan.mp4",
+      backgroundVideo: "/videos/fangelsehalan.mp4",
       introduction:
         "Se och analysera exemplet på en genomförd diskussion utan hjälpmedel.",
 

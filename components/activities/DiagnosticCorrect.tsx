@@ -20,7 +20,7 @@ interface DiagnosticCorrectProps {
 const DEFAULT_CORRECT_DIAGNOSTIC: DiagnosticCorrectData = {
   textData: {
     title: "SKRIVA NOVELL",
-    image: "/images/skönlitteratur.png",
+    image: "/images/skonlitteratur.png",
     text: `I denna diagnos ska du visa din förmåga att skriva och bearbeta en berättande text på egen hand. 
 
 Använd dina kunskaper om skrivregler, meningsbyggnad, textbindning, språklig variation och språkliga normer för att skapa en välstrukturerad och fängslande novell.`,

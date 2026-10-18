@@ -108,7 +108,7 @@ export function Quiz() {
         <div className="flex justify-center">
           <div className="relative w-36 h-36 sm:w-44 sm:h-44">
             <Image
-              src="/images/mötentext.jpeg"
+              src="/images/motentext.jpeg"
               alt="Erövrad förmåga: Möt en text"
               fill
               className="object-contain"

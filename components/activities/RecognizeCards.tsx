@@ -17,7 +17,7 @@ const DEFAULT_CARDS: RecognizeCardItem[] = [
   {
     id: 1,
     category: "Skönlitteratur",
-    image: "/images/skönlitteratur.png",
+    image: "/images/skonlitteratur.png",
     text:
       "När Alva kom hem låg brevet på köksbordet. Hon kände igen handstilen direkt, men hade inte sett den på nästan tio år. Försiktigt vände hon på kuvertet. Avsändarens namn fick hennes händer att börja skaka.",
     question: "Vilken texttyp passar bäst?",

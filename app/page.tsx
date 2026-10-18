@@ -148,7 +148,7 @@ export default function App() {
 
       {/* Stillbild som alltid ligger bakom videon */}
       <img
-        src="/images/lärstigen-stillbild.jpg"
+        src="/images/larstigen-stillbild.jpg"
         alt=""
         aria-hidden="true"
         className="absolute inset-0 z-0 h-full w-full object-cover"
@@ -156,7 +156,7 @@ export default function App() {
 
       {/* Animerad bakgrundsvideo */}
       <video
-        src="/videos/lärstigen.mp4"
+        src="/videos/larstigen.mp4"
         autoPlay
         loop
         muted

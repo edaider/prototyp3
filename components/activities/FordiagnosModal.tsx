@@ -82,7 +82,7 @@ export default function FordiagnosModal({ isOpen, onClose, onSave }: FordiagnosM
           <div className="relative shrink-0">
             <div className="absolute -inset-2 rounded-full bg-amber-500/20 blur-md animate-pulse" />
             <img
-              src="/images/draktränaren.png"
+              src="/images/draktranaren.png"
               alt="Draktränaren"
               className="relative h-44 w-auto object-contain drop-shadow-[0_10px_10px_rgba(0,0,0,0.8)]"
             />

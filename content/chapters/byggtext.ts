@@ -176,7 +176,7 @@ export const byggtext: ChapterConfig = {
     diagnosis: {
       title: "Fängelsehålan",
       backgroundImage: "/images/fängelsehåla.jpeg",
-      backgroundVideo: "/videos/fängelsehålan.mp4",
+      backgroundVideo: "/videos/fangelsehalan.mp4",
       introduction: "Visa din förmåga att bygga en argumenterande text helt själv utan Eddas stöd.",
 
       activities: [

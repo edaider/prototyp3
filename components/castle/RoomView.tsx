@@ -29,8 +29,8 @@ const ROOM_MEDIA: Record<Props["mode"], { video: string; image: string }> = {
     image: "/images/bibliotek.jpeg",
   },
   diagnosis: {
-    video: "/videos/fängelsehålan.mp4",
-    image: "/images/fängelsehåla.png",
+    video: "/videos/fangelsehalan.mp4",
+    image: "/images/fangelsehala.png",
   },
 };
 

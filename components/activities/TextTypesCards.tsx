@@ -21,7 +21,7 @@ const DEFAULT_CARDS: TextTypeCardItem[] = [
     title: "Skönlitteratur",
     emoji: "",
     subtitle: "Berätta och gestalta",
-    imgSrc: "/images/skönlitteratur.png",
+    imgSrc: "/images/skonlitteratur.png",
     question: "Vad händer – och vad får jag förstå?",
     coreMessage:
       "Skönlitterära texter berättar om människor, händelser och upplevelser. Läsaren får föreställa sig och tolka det som händer.",

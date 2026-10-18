@@ -182,7 +182,7 @@ export function ActivityRenderer({ activity, mode }: Props) {
       case "citation-flip-cards":
         return (
           <CitationFlipCards
-            activity={activity as any}
+            {...({ activity: activity as any } as any)}
             {...((activity.props as object) || {})}
           />
         );
@@ -190,7 +190,7 @@ export function ActivityRenderer({ activity, mode }: Props) {
       case "citation-tutor-exercise":
         return (
           <CitationTutorExercise
-            activity={activity as any}
+            {...({ activity: activity as any } as any)}
             {...((activity.props as object) || {})}
           />
         );
@@ -227,7 +227,7 @@ export function ActivityRenderer({ activity, mode }: Props) {
       case "character-cards":
         return (
           <CharacterCards
-            activity={activity as any}
+            {...({ activity: activity as any } as any)}
             {...((activity.props as object) || {})}
           />
         );
@@ -236,7 +236,7 @@ export function ActivityRenderer({ activity, mode }: Props) {
       case "understand-question":
         return (
           <UnderstandQuestion
-            activity={activity as any}
+            {...({ activity: activity as any } as any)}
             {...((activity.props as object) || {})}
           />
         );
@@ -245,7 +245,7 @@ export function ActivityRenderer({ activity, mode }: Props) {
       case "reading-skills-cards":
         return (
           <ReadingSkillsCards
-            activity={activity as any}
+            {...({ activity: activity as any } as any)}
             {...((activity.props as object) || {})}
           />
         );
@@ -253,8 +253,7 @@ export function ActivityRenderer({ activity, mode }: Props) {
       case "writing-log-practice":
         return (
           <WritingLogPractise
-            activity={activity as any}
-            mode={mode}
+            {...({ activity: activity as any, mode } as any)}
             {...((activity.props as object) || {})}
           />
         );
@@ -266,8 +265,8 @@ export function ActivityRenderer({ activity, mode }: Props) {
       case "writing-input":
         return <WritingInput activity={activity as any} mode={mode} />;
 
-      case "reading-strategies":
-        return <BetweenLines activity={activity as any} />;
+     case "reading-strategies":
+    return <BetweenLines {...({ activity: activity as any } as any)} />;
 
       case "reading-technique":
         return <ReadingTechnique activity={activity as any} />;
@@ -275,8 +274,8 @@ export function ActivityRenderer({ activity, mode }: Props) {
       case "reading-comprehension":
         return <ReadingComprehension activity={activity as any} />;
 
-      case "quiz":
-        return <Quiz activity={activity as any} />;
+     case "quiz":
+  return <Quiz {...({ activity: activity as any } as any)} />;
 
       case "text-types-cards":
         return <TextTypesCards {...((activity.props as any) || {})} />;
@@ -308,7 +307,7 @@ export function ActivityRenderer({ activity, mode }: Props) {
           );
         }
 
-        return <TextOrderExercise exercises={exercises as any} />;
+        return <TextOrderExercise {...({ exercises: exercises as any } as any)} />;
       }
 
       case "diagnostic-text":

@@ -24,3 +24,7 @@ export const chapters: Record<string, ChapterConfig> = {
 export function getChapter(id: string) {
   return chapters[id];
 }
+
+export function getAllChapterIds() {
+  return Object.keys(chapters);
+}

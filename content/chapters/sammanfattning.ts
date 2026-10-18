@@ -3,7 +3,6 @@ import type { ChapterConfig } from "../types";
 export const sammanfattningChapter: ChapterConfig = {
   id: "sammanfatta",
   title: "Att skriva en sammanfattning",
-  description: "Lär dig kännetecknen och stegen för att göra en bra sammanfattning.",
   rooms: {
     study: {
       title: "Studera: Vad är en sammanfattning?",

@@ -1,8 +1,15 @@
 import { notFound } from "next/navigation";
-import { getChapter } from "@/content/chapterRegistry";
+import { getChapter, getAllChapterIds } from "@/content/chapterRegistry"; 
 import { ChapterLayout } from "@/components/castle/ChapterLayout";
 
-export const instant = false;
+// Detta berättar för Next.js vilka sidor som ska byggas statiskt baserat på dina nycklar!
+export async function generateStaticParams() {
+  const chapterIds = getAllChapterIds();
+
+  return chapterIds.map((chapter) => ({
+    chapter: chapter,
+  }));
+}
 
 export default async function ChapterPage({
   params,

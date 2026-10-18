@@ -13,7 +13,7 @@ type Props = {
 };
 
 export function Flashcards({ activity }: Props) {
-  const cards = (activity.content as { cards?: Card[] }).cards ?? [];
+  const cards = ((activity as any).content as { cards?: Card[] })?.cards ?? [];
   const [revealed, setRevealed] = useState<number[]>([]);
 
   function toggleCard(index: number) {

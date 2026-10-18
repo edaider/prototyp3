@@ -114,7 +114,7 @@ export const resonemang: ChapterConfig = {
     diagnosis: {
       title: "Fängelsehålan",
       backgroundImage: "/images/fängelsehåla.jpeg",
-      backgroundVideo: "/videos/fängelsehålan.mp4",
+      backgroundVideo: "/videos/fangelsehalan.mp4",
       introduction: "Visa din förmåga att resonerande svara på frågor helt själv.",
 
       activities: [

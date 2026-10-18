@@ -62,7 +62,7 @@ export const skrivakorrekt: ChapterConfig = {
               "Skriv en spännande novell där du tillämpar goda skrivregler, gestaltande beskrivningar och en tydlig röd tråd.",
             initialText:
               "Det var en gång en person som gick ut i skogen. Skogen var mörk och mystisk. Personen hörde ett ljud bakom ett träd. Det var en skugga som rörde sig. Personen blev rädd och sprang därifrån så fort som möjligt.",
-            imageSrc: "/images/skönlitteratur.png",
+            imageSrc: "/images/skonlitteratur.png",
             imageAlt: "Skriva novell och berättande text",
           },
         },
@@ -73,7 +73,7 @@ export const skrivakorrekt: ChapterConfig = {
     diagnosis: {
       title: "Fängelsehålan",
       backgroundImage: "/images/fängelsehåla.jpeg",
-      backgroundVideo: "/videos/fängelsehålan.mp4",
+      backgroundVideo: "/videos/fangelsehalan.mp4",
       introduction:
         "Visa din förmåga att skriva korrekt och strukturera en novell helt på egen hand utan stöd.",
 
@@ -86,7 +86,7 @@ export const skrivakorrekt: ChapterConfig = {
           content: {
             textData: {
               title: "SKRIVA NOVELL",
-              image: "/images/skönlitteratur.png",
+              image: "/images/skonlitteratur.png",
               text: `I denna diagnos ska du visa din förmåga att skriva och bearbeta en berättande text på egen hand.\n\nAnvänd dina kunskaper om skrivregler, meningsbyggnad, textbindning, språklig variation och språkliga normer för att skapa en välstrukturerad och fängslande novell.`,
             },
           },

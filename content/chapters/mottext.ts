@@ -19,7 +19,7 @@ export const mottext: ChapterConfig = {
           type: "edda-video-intro",
           title: "Lyssna på vad Edda har att lära dig om lästeknik",
           props: {
-            videoSrc: "/videos/lästeknik.mp4",
+            videoSrc: "/videos/lasteknik.mp4",
             title: "Lyssna på vad Edda har att lära dig",
           },
         },
@@ -171,7 +171,7 @@ export const mottext: ChapterConfig = {
     diagnosis: {
       title: "Fängelsehålan",
       backgroundImage: "/images/fängelsehåla.jpeg",
-      backgroundVideo: "/videos/fängelsehålan.mp4",
+      backgroundVideo: "/videos/fangelsehalan.mp4",
       introduction:
         "Visa vad du har lärt dig om lästeknikens steg utan hjälpmedel eller AI.",
 

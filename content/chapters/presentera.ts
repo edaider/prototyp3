@@ -91,7 +91,7 @@ export const presentera: ChapterConfig = {
     diagnosis: {
       title: "Fängelsehålan",
       backgroundImage: "/images/fängelsehåla.jpeg",
-      backgroundVideo: "/videos/fängelsehålan.mp4",
+      backgroundVideo: "/videos/fangelsehalan.mp4",
       introduction: "Titta på hela instruktionsfilmen i fullskärm för att slutföra diagnosen.",
 
       activities: [

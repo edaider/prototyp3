@@ -67,7 +67,7 @@ export const referera: ChapterConfig = {
     diagnosis: {
       title: "Fängelsehålan",
       backgroundImage: "/images/fängelsehåla.jpeg",
-      backgroundVideo: "/videos/fängelsehålan.mp4",
+      backgroundVideo: "/videos/fangelsehalan.mp4",
       introduction:
         "Visa din förmåga att på egen hand skriva ett referat med korrekt källhänvisning.",
 
