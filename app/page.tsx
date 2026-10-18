@@ -172,24 +172,6 @@ export default function App() {
       {/* Varm toning ovanpå bakgrunden */}
       <div className="absolute inset-0 z-[2] bg-amber-950/10 pointer-events-none" />
 
-      {/* Drakvideo över Genrekunskap */}
-      <div
-        className="absolute z-20 pointer-events-none -translate-x-1/2 -translate-y-full"
-        style={{
-          top: genreNode.top,
-          left: genreNode.left,
-        }}
-      >
-        <video
-          src="/videos/drake.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-36 h-36 object-contain mix-blend-screen drop-shadow-2xl"
-        />
-      </div>
-
       {/* Guldprickad stig */}
       <div className="absolute inset-0 z-[3] pointer-events-none opacity-80">
         <svg
