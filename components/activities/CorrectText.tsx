@@ -9,7 +9,7 @@ interface CorrectTextProps {
 }
 
 export default function CorrectText({
-  title = 'Mysteriet i Skrivboken – Hitta och rätta felet',
+  title = 'Mysteriet i skrivboken – Hitta och rätta felet',
   instructions = 'Läs den felaktiga texten nedan. Studera sedan tabellen för att förstå vilka språkliga fel som gjorts och hur de kan rättas.',
 }: CorrectTextProps) {
   const [showCorrect, setShowCorrect] = useState<boolean>(false);
@@ -18,7 +18,7 @@ export default function CorrectText({
     <div className="max-w-4xl mx-auto space-y-8 text-slate-800">
 
       {/* 1. DEN FELAKTIGA TEXTEN */}
-      <div className="bg-amber-50/80 border border-amber-200 rounded-2xl p-6 shadow-sm space-y-3">
+      <div className="bg-slate-100 border border-slate-500 rounded-2xl p-6 shadow-sm space-y-3">
         <div className="flex items-center gap-2 text-amber-900 font-bold text-sm uppercase tracking-wider">
           <AlertCircle className="w-5 h-5 text-amber-600" />
           <span>Kan du hitta elevens felskrivningar?</span>
