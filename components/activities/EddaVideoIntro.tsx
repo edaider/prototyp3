@@ -13,7 +13,7 @@ interface EddaVideoIntroProps {
 }
 
 export default function EddaVideoIntro({
-  title = "Vad är typiskt för en sammanfattning?",
+  title = "Edda lär dig!",
   videoSrc = "/videos/sammanfattning.mp4",
   activity,
 }: EddaVideoIntroProps) {
