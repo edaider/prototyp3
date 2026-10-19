@@ -222,7 +222,7 @@ export default function FordiagnosModal({ isOpen, onClose, onSave }: FordiagnosM
                 : "bg-stone-800 text-stone-500 cursor-not-allowed"
             }`}
           >
-            <Award className="h-4 w-4" /> Ta emot din drake & Starta äventyret
+            <Award className="h-4 w-4" /> Ta emot din drake & starta äventyret
           </button>
         </div>
 

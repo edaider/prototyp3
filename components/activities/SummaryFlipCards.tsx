@@ -75,32 +75,32 @@ export default function SummaryFlipCards({ steps = DEFAULT_STEPS }: SummaryFlipC
                   className="
                     absolute inset-0
                     [backface-visibility:hidden]
-                    rounded-3xl border-4 border-emerald-400
-                    bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700
-                    shadow-xl overflow-hidden p-6 text-white flex flex-col justify-between
-                    transition-all group-hover:border-emerald-300
+                    rounded-3xl border-4 border-black
+                    bg-gradient-to-br from-slate-100 via-slate-150 to-slate-200
+                    shadow-xl overflow-hidden p-6 text-black flex flex-col justify-between
+                    transition-all group-hover:border-slate-800
                   "
                 >
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center rounded-full bg-white/20 px-4 py-1 text-xs font-black uppercase tracking-wider text-emerald-50">
+                    <span className="inline-flex items-center rounded-full bg-white/20 px-4 py-1 text-xs font-black uppercase tracking-wider text-black">
                       {step.stepNumber}
                     </span>
-                    <span className="text-xs font-semibold text-emerald-100 opacity-90">
+                    <span className="text-xs font-semibold text-black opacity-90">
                       Klicka för att se exempel ↺
                     </span>
                   </div>
 
                   <div className="my-auto rounded-2xl bg-white/15 border border-white/20 p-6 text-center">
-                    <p className="text-xs uppercase font-black tracking-widest text-emerald-100 mb-3">
+                    <p className="text-xs uppercase font-black tracking-widest text-black mb-3">
                       Instruktion
                     </p>
-                    <p className="text-xl sm:text-2xl font-bold leading-relaxed text-white">
+                    <p className="text-xl sm:text-2xl font-bold leading-relaxed text-black">
                       {step.description}
                     </p>
                   </div>
 
                   <div className="text-center pt-2">
-                    <span className="text-xs text-emerald-100 font-semibold opacity-80">
+                    <span className="text-xs text-black-100 font-semibold opacity-80">
                       Visa exempelbild ↺
                     </span>
                   </div>
@@ -117,11 +117,11 @@ export default function SummaryFlipCards({ steps = DEFAULT_STEPS }: SummaryFlipC
                   "
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="inline-flex items-center rounded-full bg-indigo-50 px-3.5 py-1 text-sm font-extrabold text-black">
+                    <span className="inline-flex items-center rounded-full bg-white px-3.5 py-1 text-sm font-extrabold text-black">
                       {step.stepNumber} · Exempel
                     </span>
 
-                    <span className="text-xs font-semibold text-slate-400 hover:text-black transition-colors">
+                    <span className="text-xs font-semibold text-black hover:text-black transition-colors">
                       Klicka för att vända tillbaka ↺
                     </span>
                   </div>
