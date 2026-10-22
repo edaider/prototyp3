@@ -17,7 +17,6 @@ import {
   Edit3,
   Send,
 } from "lucide-react";
-import { ARGUMENTATIVE_TEXT_LEVELS } from "@/app/data/textLevels";
 
 export type Theme = "light" | "dark" | "sepia" | "high-contrast";
 export type FontOption = "Inter" | "Atkinson Hyperlegible" | "Arial" | "Verdana";
@@ -28,6 +27,18 @@ export interface WritingPageProps {
   imageAlt?: string;
   studentInterest?: string;
 }
+
+const ARGUMENTATIVE_TEXT_LEVELS = {
+  easy: {
+    text: "Det dricks mycket energidryck i skolan. Många unga dricker det för att bli pigga. Men lärare och läkare säger att man kan få ont i huvudet, svårt att sova och få snabb pulskänning. Vissa skolor förbjuder energidryck.",
+  },
+  standard: {
+    text: "Det säljs och konsumeras allt fler energidrycker bland unga i Sverige. Många elever dricker energidryck för att orka med skoldagen, men lärare och läkare slår larm om biverkningar som hjärtklappning, koncentrationssvårigheter och sömnproblem. Vissa skolor har redan infört ett förbud mot energidrycker under skoltid, medan andra anser att det är upp till eleverna själva och deras föräldrar att bestämma.",
+  },
+  hard: {
+    text: "Konsumtionen av energidrycker bland ungdomar har ökat markant under det senaste decenniet. Många elever använder dryckerna som ett stimulantium för att hantera en krävande skoldag. Samtidigt varnar medicinsk expertis för allvarliga biverkningar såsom kardiella besvär och sömnstörningar. Frågan om ett skol- eller lagförbud har blivit föremål för en intensiv pedagogisk och folkhälsorelaterad debatt.",
+  },
+};
 
 const WRITING_STEPS = [
   {
@@ -538,7 +549,7 @@ export default function WritingPage({
           {activePopup && (
             <div className="relative p-5 rounded-3xl bg-white border-2 border-amber-300 shadow-xl flex items-start gap-4 animate-fadeIn overflow-hidden">
               <div className="shrink-0 pt-1">
-                <img src="/hovnarren.png" alt="Edda" className="w-16 h-16 object-contain animate-subtle-tilt" />
+                <img src="/images/hovnarren.png" alt="Edda" className="w-16 h-16 object-contain animate-subtle-tilt" />
               </div>
               <div className="flex-1 text-xs sm:text-sm space-y-1">
                 <span className="font-bold block text-base text-amber-900">
@@ -644,7 +655,7 @@ export default function WritingPage({
               <div className="relative flex items-end gap-1 sm:gap-2 my-2">
                 <div className="relative shrink-0 z-10 flex flex-col items-center translate-y-6 sm:translate-y-8">
                   <img
-                    src="/hovnarren.png"
+                    src="/images/hovnarren.png"
                     alt="Hovnarren Edda"
                     className={`w-28 h-28 sm:w-36 sm:h-36 object-contain drop-shadow-md transition-transform duration-500 ${
                       isSpeaking || isAnalyzing ? "animate-subtle-tilt scale-105" : "hover:scale-105"
@@ -654,7 +665,7 @@ export default function WritingPage({
 
                 <div className="relative flex-1 min-w-0 -ml-8 sm:-ml-10">
                   <img
-                    src="/pratbubbla.png"
+                    src="/images/pratbubbla.png"
                     alt=""
                     aria-hidden="true"
                     className="block w-full h-auto pointer-events-none"
@@ -818,10 +829,9 @@ export default function WritingPage({
           </div>
         )}
 
-        {/* --- FAS 2: BEARBETNING MED DYNAMISKA MARKERINGAR DÄR ALLA PARAGRAFER SYNS --- */}
+        {/* --- FAS 2: BEARBETNING MED DYNAMISKA MARKERINGAR --- */}
         {phase === "refining" && (
           <div className="space-y-10 animate-fadeIn">
-            {/* PUNKT 1, 2, 3 ÖVERST */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="p-4 rounded-2xl bg-stone-100/80 border border-stone-200 space-y-1.5">
                 <div className="flex items-center gap-2">
@@ -855,12 +865,11 @@ export default function WritingPage({
                   <span className="font-bold text-sm">Bearbeta texten</span>
                 </div>
                 <p className="text-xs text-stone-600 leading-relaxed">
-                  Läs igenom, förtydliga dina argument, lägg till bindord (t.ex. *därför, dessutom*) och rätta.
+                  Läs igenom, förtydliga dina argument, lägg till bindord och rätta.
                 </p>
               </div>
             </div>
 
-            {/* INTERAKTIV TEXT MED GARANTERADE MARKERINGAR */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <label className="font-bold text-base text-stone-800">
@@ -880,7 +889,6 @@ export default function WritingPage({
                 </div>
               </div>
 
-              {/* POP-UP FEEDBACK KORT */}
               {activeAnnotation && (
                 <div
                   className={`p-4 rounded-2xl border-2 shadow-sm flex items-start justify-between gap-3 animate-fadeIn ${
@@ -961,7 +969,6 @@ export default function WritingPage({
               )}
             </div>
 
-            {/* KONTROLLPUNKTER UNDER INPUT-FÄLTET */}
             <div className="space-y-4 pt-4 border-t">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -1007,7 +1014,6 @@ export default function WritingPage({
               </div>
             </div>
 
-            {/* SLUTLIG INLÄMNINGSKNAPP */}
             <div className="pt-6 flex justify-end">
               <button
                 type="button"

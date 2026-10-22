@@ -21,7 +21,75 @@ export async function POST(request: Request) {
       year,
       sentence,
       source,
+      step,
+      interest,
     } = body;
+
+    // -------------------------------------------------------------
+    // ACTION 0: Live Scaffolding (Feedback under steg-för-steg-skrivandet)
+    // -------------------------------------------------------------
+    if (action === "live_scaffolding") {
+      const stepNames: Record<number, string> = {
+        1: "Inledning och tes",
+        2: "Första argumentet",
+        3: "Andra argumentet/fördjupning",
+        4: "Motargument och bemötande",
+        5: "Avslutning och sammanfattning",
+        6: "Signatur",
+      };
+
+      const currentStepName = stepNames[step] || `Steg ${step}`;
+
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content:
+              "Du är Edda, en pedagogisk, varm och uppmuntrande AI-lärare i svenska för grundskolan (årskurs 9). Ge kort (1–2 korta meningar) och peppande feedback på det specifika delsteget i elevens argumenterande text. Om eleven nämner sitt intresse kan du väva in det lite lätt.",
+          },
+          {
+            role: "user",
+            content: `
+UPPGIFT/FRÅGA:
+${question || "Bör skolor införa ett förbud mot energidrycker under skoltid?"}
+
+ELEVENS INTRESSE:
+${interest || "allmänt"}
+
+DELSTEG JUST NU:
+Steg ${step}: ${currentStepName}
+
+ELEVENS SKRIVNA TEXT FÖR DETTA STEG:
+"${answer}"
+
+Ge en kort, uppmuntrande kommentar (1–2 meningar) där du berömmer vad de skrivet och peppar dem inför nästa del i argumentationen! Svara i JSON med nyckeln "tip".
+`,
+          },
+        ],
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "live_scaffolding_schema",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                tip: { type: "string" },
+              },
+              required: ["tip"],
+              additionalProperties: false,
+            },
+          },
+        },
+        temperature: 0.5,
+      });
+
+      const content = completion.choices[0]?.message?.content;
+      if (!content) throw new Error("Inget svar från OpenAI");
+
+      return NextResponse.json(JSON.parse(content));
+    }
 
     // -------------------------------------------------------------
     // ACTION 1: Skapa referat, citat & källhänvisning från vald mening
@@ -91,12 +159,13 @@ Skapa följande fyra delar:
     }
 
     // -------------------------------------------------------------
-    // ACTION 2: Bedömning av skrivlogg, sammanfattning & referat (Two Stars and a Wish)
+    // ACTION 2: Bedömning av skrivlogg, sammanfattning, referat & argumentation (Two Stars and a Wish)
     // -------------------------------------------------------------
     if (
       action === "writing_feedback" ||
       action === "summary_feedback" ||
-      action === "report_feedback"
+      action === "report_feedback" ||
+      action === "argumentative_feedback"
     ) {
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",
@@ -104,13 +173,13 @@ Skapa följande fyra delar:
           {
             role: "system",
             content:
-              "Du är Edda, en varm, pedagogisk och uppmuntrande AI-lärare i svenska. Du ska ge kort och konstruktiv feedback på en elevs svar, sammanfattning eller referat enligt metoden 'Two Stars and a Wish' (Två stjärnor och en önskan). Svara på svenska i JSON-format.",
+              "Du är Edda, en varm, pedagogisk och uppmuntrande AI-lärare i svenska. Du ska ge kort och konstruktiv feedback på en elevs argumenterande text, svar, sammanfattning eller referat enligt metoden 'Two Stars and a Wish' (Två stjärnor och en önskan). Svara på svenska i JSON-format.",
           },
           {
             role: "user",
             content: `
-LÄSTEXT:
-${text}
+LÄSTEXT/KÄLLA:
+${text || "Standardtext om energidrycker"}
 ${author ? `KÄLLFAKTA: Författare: ${author}, År: ${year}` : ""}
 
 FRÅGA/UPPGIFT:
@@ -118,14 +187,14 @@ ${question}
 
 ${figure ? `ANVÄND LÄSSTRATEGI:\n${figure} (${strategy || ""})\n` : ""}
 
-ELEVENS SVAR:
+ELEVENS TEXT:
 ${answer}
 
 GE FEEDBACK ENLIGT FÖLJANDE:
-- star1: Något konkret som eleven gör bra i sitt svar (t.ex. källhänvisning med författare/år, egna ord, eller fångat huvudhändelsen/citat).
-- star2: En till positiv observation kring hur svaret besvarar frågan eller återger texten.
-- wish: ETT konkret, tydligt nästa steg för att utveckla eller förbättra referatet/sammanfattningen/svaret (t.ex. att komma ihåg källhänvisning eller citattecken om det saknas).
-- label: En kort nivåbedömning, t.ex. "Referera & Citera", "Sammanfattning med egna ord" eller "Väl utvecklat resonemang".
+- star1: Något konkret som eleven gör bra (t.ex. tydlig tes, bra bindord som 'för det första', eller starka argument).
+- star2: En till positiv observation kring resonemanget eller uppbyggnaden.
+- wish: ETT konkret, tydligt nästa steg för att utveckla texten (t.ex. bemöta ett motargument eller utveckla en avslutande sammanfattning).
+- label: En kort nivåbedömning, t.ex. "Argumenterande text", "Tydlig tes & argument" eller "Väl utvecklat resonemang".
 `,
           },
         ],
@@ -170,7 +239,7 @@ GE FEEDBACK ENLIGT FÖLJANDE:
           {
             role: "system",
             content:
-              "Du är Edda, en varm och hjälpsam AI-lärare i svenska för grundskolan. Din uppgift är att utifrån en källtext och några stödord som en elev valt ut, skapa EN kort, tydlig och välformulerad mening som sammanfattar texten. Meningen ska naturligt väva in de utvalda stödorden.",
+              "Du är Edda, en varm och hjälpsam AI-lärare i svenska för grundskolan. Din uppgift är att utifrån en källtext och några stödord som en elev valt ut, skapa EN kort, tydlig och välformulerad mening som sammanfattar texten. Meningen ska naturally väva in de utvalda stödorden.",
           },
           {
             role: "user",
