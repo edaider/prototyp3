@@ -1,7 +1,6 @@
 "use client";
 
 import type { ActivityConfig } from "@/content/types";
-
 import { Flashcards } from "./Flashcards";
 import { WritingInput } from "./WritingInput";
 import { ReadingTechnique } from "./ReadingTechnique";
@@ -42,6 +41,7 @@ import TextGenreTable from "./TextGenreTable";
 import GenreWordsExplained from "./GenreWordsExplained";
 import WritingLogPractiseArgumentative from "./WritingLogPractiseGenre";
 import DiagnosticArgumentative from "./DiagnosticGenreText";
+import ArgumentativeTextOrder from "./ArgumentativeTextOrder";
 
 // Komponenter för Presentera muntligt
 import PresentationWordsExplained from "./PresentationWordsExplained";
@@ -72,6 +72,15 @@ export function ActivityRenderer({ activity, mode }: Props) {
       case "edda-video-intro":
         return (
           <EddaVideoIntro
+            {...((activity.content as object) || {})}
+            {...((activity.props as object) || {})}
+          />
+        );
+
+      // Drag and drop för argumenterande text
+      case "drag-drop":
+        return (
+          <ArgumentativeTextOrder
             {...((activity.content as object) || {})}
             {...((activity.props as object) || {})}
           />
@@ -265,8 +274,8 @@ export function ActivityRenderer({ activity, mode }: Props) {
       case "writing-input":
         return <WritingInput activity={activity as any} mode={mode} />;
 
-     case "reading-strategies":
-    return <BetweenLines {...({ activity: activity as any } as any)} />;
+      case "reading-strategies":
+        return <BetweenLines {...({ activity: activity as any } as any)} />;
 
       case "reading-technique":
         return <ReadingTechnique activity={activity as any} />;
@@ -274,8 +283,8 @@ export function ActivityRenderer({ activity, mode }: Props) {
       case "reading-comprehension":
         return <ReadingComprehension activity={activity as any} />;
 
-     case "quiz":
-  return <Quiz {...({ activity: activity as any } as any)} />;
+      case "quiz":
+        return <Quiz {...({ activity: activity as any } as any)} />;
 
       case "text-types-cards":
         return <TextTypesCards {...((activity.props as any) || {})} />;

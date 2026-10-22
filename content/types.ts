@@ -187,8 +187,15 @@ export type WritingLogPractiseArgumentativeActivity = {
     initialText?: string;
     imageSrc?: string;
     imageAlt?: string;
+    studentInterest?: string;
   };
-  props?: Record<string, unknown>;
+  props?: {
+    question?: string;
+    initialText?: string;
+    imageSrc?: string;
+    imageAlt?: string;
+    studentInterest?: string;
+  };
 };
 
 export type OralPresentationPrepActivity = {
@@ -330,6 +337,30 @@ export type DiagnosticTextActivity = {
   };
 };
 
+export type DragDropItem = {
+  id: string;
+  text: string;
+  slotId: string;
+};
+
+export type DragDropSlot = {
+  id: string;
+  label: string;
+  description?: string;
+};
+
+export type DragDropActivity = {
+  id: string;
+  type: "drag-drop";
+  title?: string;
+  instructions?: string;
+  content?: {
+    slots?: DragDropSlot[];
+    items?: DragDropItem[];
+  };
+  props?: Record<string, unknown>;
+};
+
 // 3. Fallback för ALLA andra aktiviteter
 export type GenericActivity = {
   id: string;
@@ -358,6 +389,7 @@ export type GenericActivity = {
     | "reading-skills-cards"
     | "reading-skill-cards"
     | "diagnostic-text"
+    | "drag-drop"
   > | string;
   title?: string;
   instructions?: string;
@@ -390,6 +422,7 @@ export type ActivityConfig =
   | RecognizeCardsActivity
   | ReadingSkillsCardsActivity
   | DiagnosticTextActivity
+  | DragDropActivity
   | GenericActivity;
 
 // 5. Kapitelsystemet
