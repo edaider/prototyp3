@@ -4,7 +4,11 @@ import React, { useState } from 'react';
 
 // --- Datastruktur och typer ---
 
-type Category = 'Alla' | 'Berättarperspektiv' | 'Språkliga knep & Bildspråk' | 'Textens uppbyggnad & Struktur';
+type Category =
+  | 'Alla'
+  | 'Argumentationens grundstenar'
+  | 'Retorik & Stilfigurer'
+  | 'Struktur & Bindord';
 
 interface Term {
   id: string;
@@ -15,91 +19,102 @@ interface Term {
 }
 
 const TERMS: Term[] = [
-  // Berättarperspektiv
+  // Argumentationens grundstenar
   {
-    id: 'forstahandsperspektiv',
-    term: 'Förstahandsperspektiv',
-    category: 'Berättarperspektiv',
-    definition: 'Historien berättas ur huvudpersonens eller en karaktärs egna ögon. Berättaren använder ordet "jag" (eller "vi"). Vi får bara veta vad denna person tänker, känner och ser.',
-    example: '"Jag gick nerför gatan och kände hur pulsen ökade."',
+    id: 'tes',
+    term: 'Tes',
+    category: 'Argumentationens grundstenar',
+    definition: 'Din huvudåsikt eller ditt ställningstagande i frågan. Det är detta du vill övertyga läsaren om i din argumenterande text.',
+    example: '"Förbjud energidrycker för alla under 18 år under skoltid."',
   },
   {
-    id: 'tredjepersonsperspektiv',
-    term: 'Tredjepersonsperspektiv',
-    category: 'Berättarperspektiv',
-    definition: 'Berättaren står utanför handlingen och beskriver karaktärerna som "han", "hon" eller "de". Ofta följer berättaren en specifik person, men utan att använda ordet "jag".',
-    example: '"Hon gick nerför gatan och försökte att inte visa att hon var rädd."',
+    id: 'argument',
+    term: 'Argument',
+    category: 'Argumentationens grundstenar',
+    definition: 'Skäl, bevis eller orsaker som stöder din tes. Svarar på frågan: Varför ska läsaren tycka som du?',
+    example: '"Energidrycker leder till koncentrationssvårigheter och hjärtklappning hos unga."',
   },
   {
-    id: 'allvetande-berattare',
-    term: 'Allvetande berättare',
-    category: 'Berättarperspektiv',
-    definition: 'En variant av tredjepersonsperspektiv där berättaren vet allt om alla. Kan hoppa mellan olika karaktärers tankar, känslor och veta vad som händer på flera ställen samtidigt.',
-    example: '"Medan Lisa gick nerför gatan var hon rädd, ovetandes om att Erik redan väntade på henne."',
-  },
-
-  // Språkliga knep & Bildspråk
-  {
-    id: 'bildsprak',
-    term: 'Bildspråk',
-    category: 'Språkliga knep & Bildspråk',
-    definition: 'Ett samlingsnamn för sätt att uttrycka sig där man skapar inre bilder hos läsaren istället för att bara beskriva saker bokstavligt.',
+    id: 'motargument',
+    term: 'Motargument',
+    category: 'Argumentationens grundstenar',
+    definition: 'Invändningar eller motståndarsidans synpunkter. Att lyfta vad de som tycker annorlunda anser visar att du förstår flera perspektiv.',
+    example: '"Vissa menar att det är föräldrarnas ansvar och inte skolans sak att bestämma."',
   },
   {
-    id: 'liknelser',
-    term: 'Liknelser',
-    category: 'Språkliga knep & Bildspråk',
-    definition: 'När man jämför en sak med en annan och använder ett jämförelseord (som "som" eller "likt").',
-    example: '"Han var modig som ett lejon."',
+    id: 'bemotande',
+    term: 'Bemötande / Svar på motargument',
+    category: 'Argumentationens grundstenar',
+    definition: 'När du bemöter motargumentet och förklarar varför det inte stämmer, eller varför ditt argument väger tyngre.',
+    example: '"Det stämmer att föräldrar har ett ansvar, men under skoltid har skolan en plikt att skaffa en trygg och god studiemiljö."',
   },
   {
-    id: 'metaforer',
-    term: 'Metaforer',
-    category: 'Språkliga knep & Bildspråk',
-    definition: 'När man jämför två saker utan jämförelseord. Man säger att något ÄR någonting annat för att beskriva en egenskap.',
-    example: '"Du är min solstråle" eller "Han har ett hjärta av sten."',
-  },
-  {
-    id: 'stilfigurer',
-    term: 'Stilfigurer',
-    category: 'Språkliga knep & Bildspråk',
-    definition: 'Ett samlingsnamn för språkliga verktyg och effekter som författare använder för att göra en text mer intressant eller dramatisk (t.ex. metaforer, upprepningar, överdrifter).',
+    id: 'sakargument',
+    term: 'Sakargument / Faktaargument',
+    category: 'Argumentationens grundstenar',
+    definition: 'Argument som bygger på kontrollera fakta, statistik, forskning eller undersökningar för att ge hög trovärdighet.',
+    example: '"Enligt Livsmedelsverket ökar höga intag av koffein risken för ångest och sömnproblem hos unga."',
   },
 
-  // Textens uppbyggnad & Struktur
+  // Retorik & Stilfigurer
   {
-    id: 'ingressen',
-    term: 'Ingressen',
-    category: 'Textens uppbyggnad & Struktur',
-    definition: 'Den kortare, ofta fetstilta inledande texten i till exempel en tidningsartikel. Den sitter direkt under rubriken och sammanfattar det viktigaste för att locka till vidare läsning.',
+    id: 'retorisk-fraga',
+    term: 'Retorisk fråga',
+    category: 'Retorik & Stilfigurer',
+    definition: 'En fråga som ställs för att få läsaren att tänka till, inte för att få ett faktiskt svar. Svaret uppfattas som självklart.',
+    example: '"Vill vi verkligen att våra elever ska sitta med hjärtklappning under lektionstid?"',
   },
   {
-    id: 'brodtext',
-    term: 'Brödtext',
-    category: 'Textens uppbyggnad & Struktur',
-    definition: 'Själva huvudtexten i en artikel, bok eller rapport. Löptexten där hela historien, resonemanget eller nyheten förklaras i detalj.',
+    id: 'anafor',
+    term: 'Anafor (Upprepning)',
+    category: 'Retorik & Stilfigurer',
+    definition: 'När man upprepar ett eller flera ord i början av flera meningar efter varandra för att skapa rytm och förstärka budskapet.',
+    example: '"Vi måste agera för hälsa. Vi måste agera för arbetsro. Vi måste agera nu."',
   },
   {
-    id: 'citat',
-    term: 'Citat',
-    category: 'Textens uppbyggnad & Struktur',
-    definition: 'En exakt återgivning av vad någon har sagt eller skrivit. I text markeras det ofta med citattecken ("...") eller talstreck (–).',
-    example: '"Jag kommer alltid att älska litteratur", sade författaren.',
+    id: 'triad',
+    term: 'Triad (Tretal)',
+    category: 'Retorik & Stilfigurer',
+    definition: 'Att rada upp tre saker, ord eller argument efter varandra. Retoriskt mycket verkningsfullt för minne och övertygelse.',
+    example: '"För ett friskare liv, bättre fokus och tryggare skolmiljö."',
   },
   {
-    id: 'kronologisk-ordning',
-    term: 'Kronologisk ordning',
-    category: 'Textens uppbyggnad & Struktur',
-    definition: 'När händelser berättas i den tidsordning de faktiskt hände – från början till slut.',
-    example: 'Måndag hände detta, tisdag hände nästa sak, och på onsdag avslutades det.',
+    id: 'ethos-pathos-logos',
+    term: 'Ethos, Pathos & Logos',
+    category: 'Retorik & Stilfigurer',
+    definition: 'Klassiska retoriska grepp: Ethos (skapa förtroende/trovärdighet), Pathos (väcka känslor), Logos (vädja till förnuft och fakta).',
+    example: 'Pathos: "Tänk på barnen som mår dåligt i det tysta."',
+  },
+
+  // Struktur & Bindord
+  {
+    id: 'bindord-och-overgangsord',
+    term: 'Övergångsord / Bindord',
+    category: 'Struktur & Bindord',
+    definition: 'Ord som knyter ihop meningar och visar på sammanhang, t.ex. när du ordnar argument eller jämför synpunkter.',
+    example: '"För det första...", "Dessutom...", "Å ena sidan... å andra sidan..."',
+  },
+  {
+    id: 'sammanfattande-avslutning',
+    term: 'Sammanfattning & Avslutande uppmaning',
+    category: 'Struktur & Bindord',
+    definition: 'Textens sista del där du upprepar din tes med nya ord, sammanfattar dina starkaste argument och ger en avslutande uppmaning.',
+    example: '"Sammanfattningsvis: Sätt elevernas hälsa främst och inför förbudet idag!"',
+  },
+  {
+    id: 'signatur',
+    term: 'Signatur',
+    category: 'Struktur & Bindord',
+    definition: 'Avsändaren som står under texten. Kan vara ditt eget namn eller en pseudonym som visar din roll i frågan.',
+    example: '"Stolt skolfrised", "Engagerad elev i åk 9" eller "Orolig förälder".',
   },
 ];
 
 const CATEGORIES: Category[] = [
   'Alla',
-  'Berättarperspektiv',
-  'Språkliga knep & Bildspråk',
-  'Textens uppbyggnad & Struktur',
+  'Argumentationens grundstenar',
+  'Retorik & Stilfigurer',
+  'Struktur & Bindord',
 ];
 
 // --- Flashcard Komponent ---
@@ -190,10 +205,10 @@ export default function FlashcardsPage() {
         {/* Rubrik */}
         <header className="mb-10 text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-3">
-            Litterära begrepp
+            Begrepp för argumenterande text
           </h1>
           <p className="text-sm md:text-base text-black/70">
-            Klicka på ett kort för att vända på det och se förklaring samt exempel.
+            Klicka på ett kort för att vända på det och lära dig om struktur, retorik och argumentationsbegrepp.
           </p>
         </header>
 
@@ -205,7 +220,7 @@ export default function FlashcardsPage() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`border border-black px-4 py-2 text-xs md:text-sm font-medium transition-colors ${
+                className={`border border-black px-4 py-2 text-xs md:text-sm font-medium transition-colors cursor-pointer ${
                   isActive
                     ? 'bg-black text-white'
                     : 'bg-white text-black hover:bg-black hover:text-white'

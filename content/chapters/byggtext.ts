@@ -22,7 +22,7 @@ export const byggtext: ChapterConfig = {
           instructions:
             "Titta på videon där Edda förklarar hur du strukturerar och bygger en övertygande argumenterande text.",
           content: {
-            videoSrc: "/videos/lessonplaceholder.mp4",
+            videoSrc: "/videos/argumenterande.mp4",
             caption: "Lär dig grunderna i argumenterande text",
           },
         },
